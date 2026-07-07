@@ -6,5 +6,16 @@ explicit status, so a failed or empty source can never be silently mistaken for
 """
 
 from .base import AsyncSourceClient, HttpResult
+from .clinicaltrials import ClinicalTrialsClient
+from .gnomad import ANCESTRY_LABELS, GnomadClient, ancestry_allele_number
+from .myvariant import MyVariantClient
 
-__all__ = ["AsyncSourceClient", "HttpResult"]
+__all__ = [
+    "AsyncSourceClient",
+    "HttpResult",
+    "MyVariantClient",
+    "GnomadClient",
+    "ancestry_allele_number",
+    "ANCESTRY_LABELS",
+    "ClinicalTrialsClient",
+]
