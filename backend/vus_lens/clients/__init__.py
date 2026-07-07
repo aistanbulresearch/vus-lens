@@ -9,6 +9,7 @@ from .base import AsyncSourceClient, HttpResult
 from .clinicaltrials import ClinicalTrialsClient
 from .gnomad import ANCESTRY_LABELS, GnomadClient, ancestry_allele_number
 from .myvariant import MyVariantClient
+from .turkish_variome import TurkishVariomeClient
 
 __all__ = [
     "AsyncSourceClient",
@@ -18,4 +19,5 @@ __all__ = [
     "ancestry_allele_number",
     "ANCESTRY_LABELS",
     "ClinicalTrialsClient",
+    "TurkishVariomeClient",
 ]

@@ -1,0 +1,5 @@
+# Turkish Variome demo-gene subset — genes actually indexed (with row counts)
+ATM	2051
+ATN1	343
+HTT	2981
+PALB2	671
