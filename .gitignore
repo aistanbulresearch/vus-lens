@@ -216,3 +216,20 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- vus-lens project-specific ---
+# Local Claude Code tooling / memory (may contain tokens — never commit)
+.claude/
+.remember/
+
+# Raw upstream downloads for the Turkish Variome index (large; rebuildable via
+# build_index.py). Only the small demo-gene subset.parquet is committed.
+data/turkish_variome/raw/
+
+# Local verification scratch output
+scripts/_scratch/
+
+# Strategic build brief: names a clinician (PII) and the competition strategy.
+# Kept local pending Özge's decision on whether it belongs in the PUBLIC repo.
+# Delete this line to include it.
+CLAUDE_CODE_BUILD_BRIEF.md
