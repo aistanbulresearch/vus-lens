@@ -1,35 +1,74 @@
-"""Cited ACMG frequency thresholds — general (non-gene-specific) defaults.
+"""ACMG frequency thresholds — gene-specific ClinGen VCEP specs with a labeled
+generic fallback.
 
-These are load-bearing scientific choices, so they live in one place, are
-documented with their source, and are never tuned to a specific variant.
-Gene/disease-specific values (e.g. ClinGen VCEP thresholds) would override these
-where available; absent that, these documented defaults apply.
+These are load-bearing scientific choices, so each set is documented with its
+source and version and is never tuned to a specific variant. Values were pulled
+from the ClinGen Criteria Specification Registry (cross-checked against the
+published ATM specification). Metric per spec text: **BA1/BS1 use the grpmax
+filtering AF (gnomAD v4 faf95); PM2 uses the raw grpmax AF.**
+
+Scope: we adopt VCEP *frequency* thresholds, not full VCEP conformance.
 """
 
 from __future__ import annotations
 
-# BA1 (benign standalone): grpmax AF above this is standalone benign evidence.
-BA1_AF = 0.05
-# BS1 (benign strong): grpmax AF above this (but <= BA1) is strong benign
-# evidence. 1% is a general default; a gene/disease-specific value is preferred.
-BS1_AF = 0.01
-# PM2 (rare/absent): grpmax AF below this, or absent from gnomAD, supports PM2.
-PM2_AF = 1e-4
-# grpmax adequacy floor: an ancestry's AF only counts toward grpmax if its
-# allele number is at least this. Prevents a tiny, noisy sample from inflating
-# grpmax. Ties into the Day-3 ancestry-confidence auditor.
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class FrequencySpec:
+    """One gene's (or the generic) frequency thresholds, with provenance."""
+
+    gene: str | None
+    source: str  # "VCEP" or "generic"
+    label: str  # citation, including spec version
+    ba1: float  # grpmax filtering AF (faf95) above this -> BA1
+    bs1: float  # grpmax filtering AF (faf95) above this -> BS1
+    pm2: float  # raw grpmax AF at or below this -> PM2
+
+
+# General ACMG-AMP 2015 / ClinGen SVI defaults — used for any gene without a
+# VCEP override. Explicitly labeled so the output never implies false authority.
+GENERIC_SPEC = FrequencySpec(
+    gene=None,
+    source="generic",
+    label="ACMG-AMP 2015 / ClinGen SVI general defaults (not gene-specific)",
+    ba1=0.05,
+    bs1=0.01,
+    pm2=1e-4,
+)
+
+# Gene-specific ClinGen HBOP VCEP thresholds (CSpec Registry).
+VCEP_SPECS: dict[str, FrequencySpec] = {
+    "ATM": FrequencySpec(
+        gene="ATM",
+        source="VCEP",
+        label="ClinGen HBOP VCEP ATM specs, CSpec GN020 v1.5.0 (2025-11-07); gnomAD v4",
+        ba1=0.005,   # grpmax filtering AF > 0.5%
+        bs1=0.0005,  # grpmax filtering AF > 0.05%
+        pm2=1e-5,    # raw grpmax AF <= 0.001%
+    ),
+    "PALB2": FrequencySpec(
+        gene="PALB2",
+        source="VCEP",
+        label="ClinGen HBOP VCEP PALB2 specs, CSpec GN077 v1.2.0 (2025-07-14); gnomAD v4",
+        ba1=0.001,          # grpmax filtering AF > 0.1%
+        bs1=0.0001,         # grpmax filtering AF > 0.01%
+        pm2=1.0 / 300_000,  # raw grpmax AF <= 1/300,000 (0.000333%)
+    ),
+}
+
+# Raw-grpmax adequacy floor for PM2: ignore an ancestry's point estimate if its
+# allele number is below this (tiny, noisy sample). gnomAD's faf95 already
+# accounts for sample size, so this applies only to the PM2 raw-AF path.
 GRPMAX_AN_FLOOR = 2000
 
-CITATION_BA1 = "ACMG-AMP 2015 (Richards et al.); ClinGen SVI — BA1 at MAF > 5%"
-CITATION_BS1 = "ACMG-AMP 2015 BS1; general 1% default (gene/disease-specific preferred)"
-CITATION_PM2 = "ACMG-AMP 2015 PM2; ClinGen SVI 2020 PM2_Supporting (absent/ultra-rare)"
 
-__all__ = [
-    "BA1_AF",
-    "BS1_AF",
-    "PM2_AF",
-    "GRPMAX_AN_FLOOR",
-    "CITATION_BA1",
-    "CITATION_BS1",
-    "CITATION_PM2",
-]
+def frequency_spec(gene: str | None) -> FrequencySpec:
+    """Return the gene-specific VCEP spec, or the labeled generic default."""
+    if gene and gene in VCEP_SPECS:
+        return VCEP_SPECS[gene]
+    return GENERIC_SPEC
+
+
+__all__ = ["FrequencySpec", "GENERIC_SPEC", "VCEP_SPECS", "GRPMAX_AN_FLOOR", "frequency_spec"]

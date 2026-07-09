@@ -41,8 +41,8 @@ QUERY = """
 query VariantAncestry($variantId: String!, $dataset: DatasetId!) {
   variant(variantId: $variantId, dataset: $dataset) {
     variant_id
-    exome  { ac an af populations { id ac an } }
-    genome { ac an af populations { id ac an } }
+    exome  { ac an af faf95 { popmax popmax_population } populations { id ac an } }
+    genome { ac an af faf95 { popmax popmax_population } populations { id ac an } }
   }
 }
 """
@@ -58,10 +58,13 @@ def _extract_sample(sample: dict[str, Any] | None) -> dict[str, Any] | None:
         if "_" in pid or pid in ("XX", "XY"):
             continue
         populations[pid] = {"an": p.get("an"), "ac": p.get("ac")}
+    faf = sample.get("faf95") or {}
     return {
         "an": sample.get("an"),
         "ac": sample.get("ac"),
         "af": sample.get("af"),
+        "faf95_popmax": faf.get("popmax"),
+        "faf95_pop": faf.get("popmax_population"),
         "populations": populations,
     }
 
@@ -94,6 +97,21 @@ def ancestry_allele_number(data: dict[str, Any], population: str) -> dict[str, A
         "exome_ac": exome.get("ac") if exome else None,
         "genome_ac": genome.get("ac") if genome else None,
     }
+
+
+def grpmax_faf(data: dict[str, Any]) -> tuple[float, str | None]:
+    """Highest grpmax filtering AF (faf95) across the exome and genome samples.
+
+    This is the metric ClinGen VCEPs specify for BA1/BS1. Returns (faf, pop)
+    with faf 0.0 when no FAF is reported (e.g. an ultra-rare variant).
+    """
+    best: tuple[float, str | None] = (0.0, None)
+    for key in ("exome", "genome"):
+        sample = data.get(key) or {}
+        val = sample.get("faf95_popmax")
+        if val is not None and val > best[0]:
+            best = (val, sample.get("faf95_pop"))
+    return best
 
 
 class GnomadClient(AsyncSourceClient):
@@ -144,4 +162,4 @@ class GnomadClient(AsyncSourceClient):
         return SourceResult.ok(SOURCE, _normalize(variant), prov)
 
 
-__all__ = ["GnomadClient", "ancestry_allele_number", "ANCESTRY_LABELS"]
+__all__ = ["GnomadClient", "ancestry_allele_number", "grpmax_faf", "ANCESTRY_LABELS"]
