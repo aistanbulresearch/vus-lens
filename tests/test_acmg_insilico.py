@@ -92,6 +92,49 @@ def test_alphamissense_is_crosscheck_not_criterion():
     assert r.crosscheck_note and "revel" in r.crosscheck_note.lower()
 
 
+def _myvariant_am_array(revel, revel_gene, am_value, am_pred, am_range):
+    """MyVariant shape where AlphaMissense is an unresolved per-transcript array
+    (canonical value None) — the real HFE C282Y case: 10 transcripts, mixed
+    vep_canonical/appris alignment, so no single canonical score, but every
+    per-transcript prediction agrees."""
+    return SourceResult.ok(
+        "MyVariant.info",
+        {
+            "gene": revel_gene,
+            "revel": {"value": revel, "transcript": "ENST1", "method": "uniform", "uncertain": False, "raw": revel},
+            "alphamissense": {
+                "value": am_value, "transcript": None, "method": "unresolved",
+                "uncertain": True, "raw": am_range, "range": am_range, "pred": am_pred,
+            },
+        },
+    )
+
+
+def test_am_array_unanimous_pred_resolves_direction_as_crosscheck():
+    # HFE-like: AM array can't resolve to the canonical transcript (value None),
+    # but all 10 predictions are "P" -> direction is unambiguous -> surface it.
+    r = assess_insilico(
+        _myvariant_am_array(0.872, "HFE", None, ["P"] * 10, am_range=[0.9403, 0.9738])
+    )
+    assert r.criterion is ACMGCriterion.PP3  # REVEL alone still decides the criterion
+    assert r.alphamissense is not None
+    assert r.alphamissense["direction"] == "pathogenic"
+    assert r.alphamissense["value"] is None  # no single canonical number fabricated
+    assert r.crosscheck_note and "pathogenic" in r.crosscheck_note.lower()
+    assert "concordant" in r.crosscheck_note.lower()  # PP3 (pathogenic) == AM pathogenic
+
+
+def test_am_array_mixed_pred_yields_no_crosscheck():
+    # Predictions disagree across transcripts -> no unanimous direction ->
+    # drop the cross-check (never fabricate a direction). Criterion still stands.
+    r = assess_insilico(
+        _myvariant_am_array(0.872, "HFE", None, ["P", "B", "P", "A"], am_range=[0.3, 0.95])
+    )
+    assert r.criterion is ACMGCriterion.PP3
+    assert r.alphamissense is None
+    assert r.crosscheck_note is None
+
+
 # --- fail-loud / edge cases ------------------------------------------------
 def test_uncertain_transcript_no_criterion_with_flag():
     r = assess_insilico(_myvariant(revel=None, revel_method="unresolved", revel_uncertain=True))

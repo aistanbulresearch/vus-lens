@@ -52,24 +52,74 @@ def _classify_revel(revel: float, spec: InSilicoSpec):
     return None, None, "indeterminate"
 
 
+_AM_DIRECTION = {"P": "pathogenic", "B": "benign", "A": "ambiguous"}
+
+
+def _as_list(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    return value if isinstance(value, list) else [value]
+
+
+def _am_direction(pred: Any) -> str | None:
+    """Resolve an AlphaMissense direction from a scalar OR per-transcript pred.
+
+    AlphaMissense is a Layer-2 cross-check — a *directional* signal, not a scored
+    criterion — so a per-transcript pred array that agrees on one direction is
+    unambiguous regardless of which transcript is canonical. This deliberately
+    differs from REVEL (the criterion), where an unresolved canonical transcript
+    withholds the criterion. Mixed predictions -> no directional call (we do not
+    fabricate a direction), matching the same discipline.
+    """
+    dirs = {_AM_DIRECTION.get(str(p).upper()) for p in _as_list(pred) if p is not None}
+    dirs.discard(None)  # ignore unknown pred codes
+    return next(iter(dirs)) if len(dirs) == 1 else None
+
+
 def _crosscheck(am: dict[str, Any], criterion) -> tuple[dict[str, Any] | None, str | None]:
-    """Surface AlphaMissense for Layer 2 (not a criterion) with a (dis)agreement note."""
-    if not am or am.get("value") is None:
+    """Surface AlphaMissense for Layer 2 (not a criterion) with a (dis)agreement note.
+
+    Fires when the AM predictions resolve to one direction — either a canonical
+    scalar score (single transcript) or a per-transcript array whose predictions
+    all agree. When only the array agrees (no single canonical value), we report
+    the direction and the score range, never a fabricated single number.
+    """
+    if not am:
         return None, None
-    surfaced = {"value": am.get("value"), "pred": am.get("pred")}
-    pred = (am.get("pred") or "").upper()
+    am_dir = _am_direction(am.get("pred"))
+    if am_dir is None:  # no unanimous AM direction -> no clean cross-check
+        return None, None
+
+    value = am.get("value")
+    rng = am.get("range")
+    n_tx = len([p for p in _as_list(am.get("pred")) if p is not None])
+    surfaced = {
+        "value": value,
+        "pred": am.get("pred"),
+        "direction": am_dir,
+        "score_range": rng,
+        "n_transcripts": n_tx,
+    }
+    if value is not None:
+        detail = f"{value:.3g}"
+    elif isinstance(rng, list) and len(rng) == 2:
+        detail = f"{rng[0]:.3g}-{rng[1]:.3g} across {n_tx} transcripts"
+    else:
+        detail = f"consistent across {n_tx} transcripts"
+
     revel_dir = (
         "pathogenic" if criterion is ACMGCriterion.PP3
         else "benign" if criterion is ACMGCriterion.BP4
         else "indeterminate"
     )
-    am_dir = {"P": "pathogenic", "B": "benign", "A": "ambiguous"}.get(pred, pred.lower() or "unknown")
-    if revel_dir == "indeterminate":
-        note = f"AlphaMissense {am_dir} while REVEL is indeterminate (cross-source signal for Layer 2)"
+    if am_dir == "ambiguous":
+        note = f"AlphaMissense ambiguous ({detail}); REVEL {revel_dir} (cross-source signal for Layer 2)"
+    elif revel_dir == "indeterminate":
+        note = f"AlphaMissense {am_dir} ({detail}) while REVEL is indeterminate (cross-source signal for Layer 2)"
     elif am_dir == revel_dir:
-        note = f"AlphaMissense {am_dir} concordant with REVEL ({revel_dir})"
+        note = f"AlphaMissense {am_dir} ({detail}) concordant with REVEL ({revel_dir})"
     else:
-        note = f"AlphaMissense {am_dir} disagrees with REVEL ({revel_dir}) - cross-source conflict for Layer 2"
+        note = f"AlphaMissense {am_dir} ({detail}) disagrees with REVEL ({revel_dir}) - cross-source conflict for Layer 2"
     return surfaced, note
 
 
