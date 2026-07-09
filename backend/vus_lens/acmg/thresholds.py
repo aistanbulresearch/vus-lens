@@ -16,6 +16,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .criteria import EvidenceStrength
+
 
 @dataclass(frozen=True)
 class FrequencySpec:
@@ -73,4 +75,74 @@ def frequency_spec(gene: str | None) -> FrequencySpec:
     return GENERIC_SPEC
 
 
-__all__ = ["FrequencySpec", "GENERIC_SPEC", "VCEP_SPECS", "GRPMAX_AN_FLOOR", "frequency_spec"]
+# --- In-silico PP3/BP4 (REVEL only; AlphaMissense is a Layer-2 cross-check) ---
+# Per ClinGen/Pejaver: ONE pre-defined calibrated tool; correlated predictors are
+# not counted independently. Bands are cited; a score in the indeterminate gap
+# yields neither PP3 nor BP4 (never read mid-range REVEL as benign).
+_ES = EvidenceStrength
+
+
+@dataclass(frozen=True)
+class InSilicoSpec:
+    gene: str | None
+    source: str
+    label: str
+    tool: str  # "REVEL" or "SpliceAI"
+    protein_predictor_used: bool  # False for genes whose VCEP uses SpliceAI only
+    pp3: tuple[tuple[float, EvidenceStrength], ...]  # (min REVEL, strength), high->low
+    bp4: tuple[tuple[float, EvidenceStrength], ...]  # (max REVEL, strength), low->high
+
+
+# Pejaver et al. 2022 (AJHG) Table 2 — general REVEL calibration.
+PEJAVER_GENERIC_INSILICO = InSilicoSpec(
+    gene=None,
+    source="generic",
+    label="Pejaver et al. 2022 (Am J Hum Genet) ClinGen PP3/BP4 REVEL calibration",
+    tool="REVEL",
+    protein_predictor_used=True,
+    pp3=((0.932, _ES.STRONG), (0.773, _ES.MODERATE), (0.644, _ES.SUPPORTING)),
+    bp4=((0.003, _ES.VERY_STRONG), (0.016, _ES.STRONG), (0.183, _ES.MODERATE), (0.290, _ES.SUPPORTING)),
+)
+
+VCEP_INSILICO_SPECS: dict[str, InSilicoSpec] = {
+    "ATM": InSilicoSpec(
+        gene="ATM",
+        source="VCEP",
+        label="ClinGen HBOP VCEP ATM GN020 v1.5.0; missense REVEL, Supporting only",
+        tool="REVEL",
+        protein_predictor_used=True,
+        pp3=((0.7333, _ES.SUPPORTING),),  # REVEL > 0.7333
+        bp4=((0.249, _ES.SUPPORTING),),   # REVEL <= 0.249
+    ),
+    # PALB2 VCEP uses SpliceAI as the sole PP3/BP4 predictor; protein-level REVEL
+    # is not applied to missense. We do not run live SpliceAI -> declared gap.
+    "PALB2": InSilicoSpec(
+        gene="PALB2",
+        source="VCEP",
+        label="ClinGen HBOP VCEP PALB2 GN077 v1.2.0; SpliceAI-only PP3/BP4 (protein REVEL not applied)",
+        tool="SpliceAI",
+        protein_predictor_used=False,
+        pp3=(),
+        bp4=(),
+    ),
+}
+
+
+def insilico_spec(gene: str | None) -> InSilicoSpec:
+    """Return the gene-specific VCEP in-silico spec, or the generic Pejaver one."""
+    if gene and gene in VCEP_INSILICO_SPECS:
+        return VCEP_INSILICO_SPECS[gene]
+    return PEJAVER_GENERIC_INSILICO
+
+
+__all__ = [
+    "FrequencySpec",
+    "GENERIC_SPEC",
+    "VCEP_SPECS",
+    "GRPMAX_AN_FLOOR",
+    "frequency_spec",
+    "InSilicoSpec",
+    "PEJAVER_GENERIC_INSILICO",
+    "VCEP_INSILICO_SPECS",
+    "insilico_spec",
+]

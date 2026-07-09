@@ -19,6 +19,7 @@ class ACMGCriterion(str, Enum):
 
 class EvidenceStrength(str, Enum):
     STANDALONE = "standalone"
+    VERY_STRONG = "very_strong"
     STRONG = "strong"
     MODERATE = "moderate"
     SUPPORTING = "supporting"
