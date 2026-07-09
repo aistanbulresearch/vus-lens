@@ -21,7 +21,11 @@ from vus_lens.pipeline import evaluate_variant
 VARIANTS = [
     VariantQuery(raw="ATM p.Arg248Gly (HERO)", rsid="rs730881336", gene="ATM", ref="C", alt="G"),
     VariantQuery(raw="HFE p.Cys282Tyr (C282Y)", rsid="rs1800562", gene="HFE", ref="G", alt="A"),
-    VariantQuery(raw="ATN1 c.1506_1508dup (repeat)", rsid="rs60216939", gene="ATN1"),
+    # The rsID rs60216939 is ambiguous across ~78 repeat-length alleles -- an SNV
+    # database cannot represent a tandem repeat as a single variant. We query the
+    # specific normal-range allele (17 repeats) by its MyVariant id; trigger 6.2
+    # fires on the gene regardless of how the live lookup resolves.
+    VariantQuery(raw="ATN1 CAG[17] (normal-range; c.1506_1508dup)", hgvs="chr12:g.7045894GCA[17]", gene="ATN1"),
 ]
 
 

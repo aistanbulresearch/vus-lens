@@ -99,9 +99,10 @@ def check_ancestry_frequency(
         severity="caution",
         message=f"Frequency evidence for Middle Eastern ancestry rests on N={mid_an} alleles.",
         detail=(
-            f"This is a rarity call at threshold {threshold:g}; confidently supporting "
-            f"it (zero observations) needs ~{adequate_an:.0f} alleles by the rule of 3, "
-            f"but gnomAD mid has only {mid_an}. {_turkish_variome_note(turkish_variome)} "
+            f"This is a rarity call at the cited threshold {threshold:g}; by the rule of 3, "
+            f"confidently supporting it (zero observations) needs ~{adequate_an:.0f} alleles "
+            f"(3 / {threshold:g}), but gnomAD mid has only {mid_an}. "
+            f"{_turkish_variome_note(turkish_variome)} "
             f"The frequency evidence is unreliable for a Turkish patient; interpret with caution."
         ),
         citation="Rule of 3 (Hanley & Lippman-Hand 1983); gnomAD v4 mid; Turkish Variome (Kars et al. 2021)",
@@ -147,7 +148,7 @@ def check_empty_not_clean(
                 trigger="6.3 empty-not-clean",
                 severity="caution",
                 message="Gene outside the indexed Turkish Variome subset.",
-                detail=f"{turkish_variome.message} - absence from the subset is not evidence of absence in Turks.",
+                detail="This gene is not in the indexed Turkish Variome subset; absence from the subset is not evidence of absence in Turkish individuals.",
                 citation=None,
             )
         )
