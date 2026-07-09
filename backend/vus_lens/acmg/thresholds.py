@@ -5,7 +5,9 @@ These are load-bearing scientific choices, so each set is documented with its
 source and version and is never tuned to a specific variant. Values were pulled
 from the ClinGen Criteria Specification Registry (cross-checked against the
 published ATM specification). Metric per spec text: **BA1/BS1 use the grpmax
-filtering AF (gnomAD v4 faf95); PM2 uses the raw grpmax AF.**
+filtering AF (gnomAD v4 faf95); PM2 uses the raw grpmax AF.** Verified per gene:
+both ATM (GN020) and PALB2 (GN077) word PM2 as "Frequency <= X" (raw point
+estimate), while BA1/BS1 are worded "Grpmax Filtering AF".
 
 Scope: we adopt VCEP *frequency* thresholds, not full VCEP conformance.
 """
