@@ -108,6 +108,23 @@ def aggregate_evidence(
             f"deterministic class '{acmg_class.value}' conflicts with ClinVar benign "
             f"{list(clinvar.significances)} - cross-source conflict [Layer 2]"
         )
+
+    # Layer-1 internal inconsistency: the class direction contradicts a criterion
+    # this tool itself assigned (e.g. HFE: Benign class, yet a PP3 is present).
+    assigned = [i.criterion for i in criteria]
+    path_crits = [c.value for c in assigned if c in (ACMGCriterion.PM2, ACMGCriterion.PP3)]
+    benign_crits = [c.value for c in assigned if c in (ACMGCriterion.BA1, ACMGCriterion.BS1, ACMGCriterion.BP4)]
+    if benign_class and path_crits:
+        detections.append(
+            f"internal inconsistency: class '{acmg_class.value}' but pathogenic criterion(s) "
+            f"{path_crits} assigned [Layer 1]"
+        )
+    if path_class and benign_crits:
+        detections.append(
+            f"internal inconsistency: class '{acmg_class.value}' but benign criterion(s) "
+            f"{benign_crits} assigned [Layer 1]"
+        )
+
     if insilico.band == "indeterminate" and clinvar.has_pathogenic:
         detections.append("in-silico indeterminate while ClinVar reports pathogenic [Layer 2]")
     if insilico.crosscheck_note:

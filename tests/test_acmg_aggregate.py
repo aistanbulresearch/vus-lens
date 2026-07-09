@@ -73,6 +73,18 @@ def test_insilico_noncordance_is_surfaced_as_detection():
     assert any("AlphaMissense" in d for d in b.detections)
 
 
+def test_layer1_internal_inconsistency_benign_class_with_pathogenic_criterion():
+    # HFE-like: BA1 -> Benign class, but a PP3 (pathogenic) criterion is also
+    # assigned -> a real internal inconsistency (Layer-1 self-audit substrate).
+    b = aggregate_evidence(
+        freq(ACMGCriterion.BA1),
+        insil(ACMGCriterion.PP3, EvidenceStrength.MODERATE, band="PP3_moderate"),
+        cv(),
+        gene="HFE",
+    )
+    assert any("internal inconsistency" in d.lower() and "PP3" in d for d in b.detections)
+
+
 def test_unavailable_source_is_fail_loud():
     b = aggregate_evidence(freq(None, available=False), insil(None), cv(), gene="X")
     assert "frequency" in b.unavailable_sources

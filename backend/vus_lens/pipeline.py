@@ -16,6 +16,7 @@ from .acmg.frequency import FrequencyResult, assess_frequency
 from .acmg.insilico import InSilicoResult, assess_insilico
 from .clients.gnomad import GnomadClient
 from .clients.myvariant import MyVariantClient
+from .clients.turkish_variome import TurkishVariomeClient
 from .models.evidence import SourceResult
 from .models.variant import VariantQuery
 
@@ -26,6 +27,7 @@ class EvaluationResult:
     gene: str | None
     myvariant: SourceResult
     gnomad: SourceResult
+    turkish_variome: SourceResult
     frequency: FrequencyResult
     insilico: InSilicoResult
     clinvar: ClinVarResult
@@ -37,9 +39,11 @@ async def evaluate_variant(
     *,
     myvariant_client: MyVariantClient | None = None,
     gnomad_client: GnomadClient | None = None,
+    turkish_variome_client: TurkishVariomeClient | None = None,
 ) -> EvaluationResult:
     mv = myvariant_client or MyVariantClient()
     gn = gnomad_client or GnomadClient()
+    tv = turkish_variome_client or TurkishVariomeClient()
 
     mv_res = await mv.fetch(query)
 
@@ -56,13 +60,14 @@ async def evaluate_variant(
             )
 
     gn_res = await gn.fetch(resolved)
+    tv_res = await tv.fetch(resolved)
 
     frequency = assess_frequency(gn_res, gene)
     insilico = assess_insilico(mv_res, gene)
     clinvar = read_clinvar(mv_res)
     bundle = aggregate_evidence(frequency, insilico, clinvar, gene)
 
-    return EvaluationResult(query, gene, mv_res, gn_res, frequency, insilico, clinvar, bundle)
+    return EvaluationResult(query, gene, mv_res, gn_res, tv_res, frequency, insilico, clinvar, bundle)
 
 
 __all__ = ["EvaluationResult", "evaluate_variant"]

@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 
+from vus_lens.auditor.core import audit
 from vus_lens.clients.gnomad import ancestry_allele_number
 from vus_lens.models.variant import VariantQuery
 from vus_lens.pipeline import evaluate_variant
@@ -33,8 +34,9 @@ async def main() -> None:
         r = await evaluate_variant(q)
         b = r.bundle
         rule(f"{q.raw}   [gene {r.gene}]")
-        print(f"  sources: MyVariant={r.myvariant.status.value}  gnomAD={r.gnomad.status.value}")
-        print(f"  DETERMINISTIC CLASS: {b.acmg_class.value}  ({b.class_basis})")
+        print("  --- AUDITOR OFF: deterministic evidence card ---")
+        print(f"  sources: MyVariant={r.myvariant.status.value}  gnomAD={r.gnomad.status.value}  TurkishVariome={r.turkish_variome.status.value}")
+        print(f"  CLASS: {b.acmg_class.value}  ({b.class_basis})")
 
         print("  assigned criteria:")
         if b.criteria:
@@ -57,12 +59,20 @@ async def main() -> None:
         else:
             print(f"  gnomAD: {r.gnomad.status.value} - {r.gnomad.message}")
 
-        print("  >>> DETECTIONS (substrate for the reasoning layers):")
-        if b.detections:
-            for d in b.detections:
-                print(f"      * {d}")
+        # --- Auditor ON: confidence warnings on top ---
+        result = audit(r)
+        print("\n  --- AUDITOR ON: confidence warnings on top ---")
+        if result.warnings:
+            for w in result.warnings:
+                print(f"    [!] {w.trigger} ({w.severity}): {w.message}")
+                print(f"        {w.detail}")
+                if w.citation:
+                    print(f"        cite: {w.citation}")
         else:
-            print("      (no inconsistencies detected - would show 'audit passed')")
+            print("    audit passed - no confidence warnings")
+        print("  deterministic detections (Day-4 reasoning substrate):")
+        for d in (b.detections or ["(none)"]):
+            print(f"    * {d}")
 
 
 if __name__ == "__main__":
