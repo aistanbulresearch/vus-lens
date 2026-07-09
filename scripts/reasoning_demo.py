@@ -19,6 +19,13 @@ from __future__ import annotations
 import asyncio
 import sys
 
+try:  # load ANTHROPIC_API_KEY from a gitignored .env at the repo root, if present
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass
+
 from vus_lens.auditor.core import audit
 from vus_lens.models.variant import VariantQuery
 from vus_lens.pipeline import evaluate_variant
@@ -60,6 +67,8 @@ async def main() -> None:
         print("  pipeline + auditor + substrate below are REAL; the plain-language layers are")
         print("  credential-gated (they call claude-opus-4-8 at runtime). The assembled prompt")
         print("  is printed so the reasoning is reproducible with a key.")
+        print("  To run the real reasoning: put ANTHROPIC_API_KEY=... in a .env file at the repo")
+        print("  root (gitignored), then re-run this script.")
 
     for q in VARIANTS:
         ev = await evaluate_variant(q)
