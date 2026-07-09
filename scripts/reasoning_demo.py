@@ -26,6 +26,13 @@ try:  # load ANTHROPIC_API_KEY from a gitignored .env at the repo root, if prese
 except ImportError:
     pass
 
+# Model output contains em-dashes; Windows consoles default to cp1252 and would
+# mangle them. Emit UTF-8 so the reasoning renders cleanly in a terminal demo.
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except (AttributeError, ValueError):
+    pass
+
 from vus_lens.auditor.core import audit
 from vus_lens.models.variant import VariantQuery
 from vus_lens.pipeline import evaluate_variant
