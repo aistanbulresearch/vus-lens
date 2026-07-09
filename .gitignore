@@ -232,5 +232,4 @@ scripts/_scratch/
 # Strategic build briefs: name a clinician (PII/KVKK) + competition strategy.
 # These must NEVER enter the public repo.
 CLAUDE_CODE_BUILD_BRIEF.md
-vus-lens_FINAL_BRIEF.md
-*_FINAL_BRIEF.md
+*FINAL_BRIEF*
