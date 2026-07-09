@@ -92,7 +92,12 @@ The tool deliberately does not implement the parts of the protocols outside its
 scope: no PM3 bi-allelic / in-trans logic, no PVS1 loss-of-function decision
 tree, and no functional-assay (PS3/BS3), segregation (PP1/BS4), or de novo
 (PS2/PM6) evidence. It also honors gene-specific exclusions: the ATM VCEP does
-not use PM1, PP2, or PS2, and the tool never applies them to ATM.
+not use PM1, PP2, or PS2, and the tool never applies them to ATM. Likewise, the
+PALB2 VCEP does not establish missense pathogenicity — its PP3/BP4 are
+SpliceAI-based — so the tool deliberately **withholds** protein-level REVEL
+PP3/BP4 for PALB2 missense variants. This is gene-aware rigor, not a gap: a naive
+tool that applied a REVEL PP3 to a PALB2 missense would be making a call the
+expert panel explicitly declines to make.
 
 **Splice, declared:** the PALB2 v1.2.0 spec adds SpliceAI PP3/BP4 thresholds.
 Because we do not run a live splice predictor, splice-relevant variants receive
