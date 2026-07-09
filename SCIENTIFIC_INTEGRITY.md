@@ -117,6 +117,14 @@ Fail-loud is the **core mechanism**, not error handling bolted on:
   read live from the source at query time. No threshold, score, or output is
   tuned to make the demo look better. An inconvenient result stands.
 
+**Proven on our own pipeline.** On Day 1 the Turkish Variome loader hit this
+exact failure mode from the inside: the source file is multi-member gzip, and a
+naive decoder silently read 245 of 46,739,479 rows *while reporting success*.
+The fail-loud guard refused to write, and an MD5 + size integrity gate now makes
+a truncated decode impossible to ship as a "complete" dataset. A tool that
+quietly accepts 245 of 46.7M rows is the same defect as one that quietly treats
+a failed lookup as benign — see [`NOTES/anecdotes.md`](NOTES/anecdotes.md).
+
 ---
 
 ## 5. What this tool is not
