@@ -158,7 +158,44 @@ a failed lookup as benign — see [`NOTES/anecdotes.md`](NOTES/anecdotes.md).
 
 ---
 
-## 5. What this tool is not
+## 5. The reasoning-and-audit layer — how "Claude audits, never decides" is enforced
+
+Section 1 states the rule; this is the mechanism (Day 4). The plain-language
+reasoning is produced by Claude (`claude-opus-4-8`) in three layers — evidence
+self-audit (Layer 1), cross-source reconciliation (Layer 2), and input triage
+(Layer 3) — and the design makes the integrity rule **structural**, not a matter
+of prompt etiquette:
+
+- **The model can only explain what the deterministic engine actually found.**
+  Each layer receives a fixed substrate — the computed class, the assigned
+  criteria, and the real detections/warnings — assembled *verbatim* from the
+  no-LLM output. It never sees the raw variant or open-ended context. A finding
+  the deterministic layer did not produce is never placed in front of the model,
+  so it cannot explain (or invent) one. "Every explanation traces to a real
+  detection" is therefore a property of the data path, enforced by a test, not a
+  hope.
+
+- **The class is fixed input, never output.** The class is handed to the model as
+  a stated fact it may restate but must not change. An output guardrail flags any
+  self-classification language (e.g. "reclassify", "the correct classification
+  is") as a rule violation. The model informs; the deterministic engine and the
+  clinician decide.
+
+- **Calibrated, not dramatic; and no manufactured layers.** A layer with nothing
+  to explain says so. Input triage (Layer 3) is *dropped* when it carries no
+  material input-adequacy concern — a clean SNV never receives a filler "the input
+  looks fine" paragraph — and kept only for a real issue (a repeat-locus assay
+  mismatch, a call withheld for transcript ambiguity, or an unreachable required
+  source).
+
+- **Credential-gated, never faked.** The reasoning layer calls the Claude API at
+  runtime and requires a credential. With no key, the deterministic evaluation and
+  auditor still run in full; only the plain-language layer is withheld — and it
+  says so — never replaced with canned or fabricated text.
+
+---
+
+## 6. What this tool is not
 
 **Decision support — not a classifier, not a diagnosis.** It surfaces and
 organizes evidence and audits its own confidence. The interpretation, and the
