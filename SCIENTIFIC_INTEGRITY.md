@@ -76,6 +76,32 @@ returns "nothing found." These limits are chosen, and stated up front:
 None of these is an apology. Each is the tool refusing to imply knowledge it
 does not have.
 
+### Standards conformance — adoption, not full conformance
+
+The tool adopts the **frequency thresholds** of the ClinGen Hereditary Breast,
+Ovarian and Pancreatic Cancer (HBOP) Variant Curation Expert Panel for the genes
+it covers — **ATM** (CSpec GN020 v1.5.0) and **PALB2** (CSpec GN077 v1.2.0),
+both on gnomAD v4 — and the VCEP / Pejaver-calibrated **REVEL & AlphaMissense
+PP3/BP4** thresholds for in-silico evidence. Every other gene falls back to
+general ACMG-AMP / ClinGen-SVI defaults, explicitly labeled *"generic default,
+not gene-specific"* in the output, so the tool never implies VCEP authority it
+does not have.
+
+This is **adoption of specific, cited criteria — not full VCEP conformance.**
+The tool deliberately does not implement the parts of the protocols outside its
+scope: no PM3 bi-allelic / in-trans logic, no PVS1 loss-of-function decision
+tree, and no functional-assay (PS3/BS3), segregation (PP1/BS4), or de novo
+(PS2/PM6) evidence. It also honors gene-specific exclusions: the ATM VCEP does
+not use PM1, PP2, or PS2, and the tool never applies them to ATM.
+
+**Splice, declared:** the PALB2 v1.2.0 spec adds SpliceAI PP3/BP4 thresholds.
+Because we do not run a live splice predictor, splice-relevant variants receive
+an explicit *"in-silico splice effect not scored; manual / expert splice
+assessment required"* flag rather than a silently-missing criterion — the same
+fail-loud stance as everywhere else.
+
+These boundaries are stated up front, not discovered later.
+
 ---
 
 ## 3. Source and license transparency
