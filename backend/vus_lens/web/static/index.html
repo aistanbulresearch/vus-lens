@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VUS·Lens — VUS Confidence Auditor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Non-render-blocking font load: text shows immediately in the fallback stack and
+     swaps to the webfonts when they arrive; if the network can't reach Google Fonts,
+     the refined fallbacks (Georgia / system sans / Consolas) stand in cleanly. -->
+<link rel="stylesheet" media="print" onload="this.media='all'"
+  href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"></noscript>
+<style>
+  :root{
+    --paper:#F3F1EA; --surface:#FCFBF7; --surface-2:#F7F5EE;
+    --ink:#1B1D1F; --ink-soft:#484B4E; --muted:#8A877E; --faint:#B4B1A6;
+    --line:#E4E1D6; --line-soft:#EDEAE0;
+    --accent:#0C5D57; --accent-deep:#093F3B; --accent-soft:#E4EEEC;
+    --caution:#8F6412; --caution-bg:#F8F0DC; --caution-line:#E3C787;
+    --critical:#8C2A22; --critical-bg:#F6E7E2; --critical-line:#DFB1A7;
+    --benign:#3C6E4A; --vus:#836F2E; --path:#8C2A22;
+    --serif:'Spectral',Georgia,'Times New Roman',serif;
+    --sans:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;
+    --mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+    --shadow:0 1px 2px rgba(27,29,31,.04), 0 8px 30px -14px rgba(27,29,31,.18);
+    --shadow-lift:0 2px 6px rgba(27,29,31,.06), 0 20px 50px -20px rgba(27,29,31,.28);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(1200px 600px at 82% -8%, rgba(12,93,87,.05), transparent 60%),
+      radial-gradient(900px 500px at 0% 100%, rgba(140,42,34,.03), transparent 55%);
+    min-height:100vh;
+  }
+  .wrap{max-width:800px; margin:0 auto; padding:56px 26px 90px}
+  ::selection{background:var(--accent-soft)}
+
+  /* ---------- masthead ---------- */
+  .masthead{margin-bottom:40px}
+  .brand{
+    font-family:var(--mono); font-weight:600; font-size:13px; letter-spacing:.42em;
+    color:var(--accent); text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:10px;
+  }
+  .brand::before{content:""; width:26px; height:1.5px; background:var(--accent); display:inline-block}
+  .tagline{
+    font-family:var(--serif); font-weight:400; font-size:29px; line-height:1.32;
+    letter-spacing:-.01em; margin:20px 0 0; max-width:34ch; color:var(--ink);
+  }
+  .tagline em{font-style:italic; color:var(--accent-deep)}
+  .disclaimer{
+    margin-top:16px; font-size:12.5px; color:var(--muted); font-weight:500;
+    letter-spacing:.02em; display:inline-flex; align-items:center; gap:8px;
+  }
+  .disclaimer::before{content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); opacity:.6}
+
+  /* ---------- selector ---------- */
+  .selector{margin:34px 0 8px}
+  .selector-label{
+    font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:14px;
+  }
+  .chips{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+  @media(max-width:560px){ .chips{grid-template-columns:1fr} }
+  .chip{
+    text-align:left; cursor:pointer; background:var(--surface); border:1px solid var(--line);
+    border-radius:13px; padding:15px 17px; font-family:var(--sans); color:var(--ink);
+    transition:transform .18s cubic-bezier(.2,.7,.3,1), border-color .18s, box-shadow .18s, background .18s;
+    position:relative; overflow:hidden;
+  }
+  .chip:hover{transform:translateY(-2px); border-color:var(--accent); box-shadow:var(--shadow)}
+  .chip.active{border-color:var(--accent); background:var(--surface); box-shadow:0 0 0 1px var(--accent), var(--shadow)}
+  .chip .chip-label{font-family:var(--mono); font-weight:500; font-size:15px; letter-spacing:-.01em}
+  .chip .chip-note{font-size:12px; color:var(--muted); margin-top:5px}
+  .chip .chip-tag{
+    position:absolute; top:13px; right:14px; font-family:var(--mono); font-size:9.5px;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--accent); background:var(--accent-soft);
+    padding:3px 7px; border-radius:20px;
+  }
+  .freeform{display:flex; gap:9px; margin-top:14px}
+  .freeform input{
+    flex:1; font-family:var(--mono); font-size:13.5px; padding:11px 14px; border-radius:11px;
+    border:1px solid var(--line); background:var(--surface); color:var(--ink); outline:none;
+    transition:border-color .18s;
+  }
+  .freeform input:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+  .freeform button{
+    font-family:var(--mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    padding:0 18px; border-radius:11px; border:1px solid var(--accent); background:var(--accent); color:#fff;
+    cursor:pointer; transition:background .18s, transform .12s;
+  }
+  .freeform button:hover{background:var(--accent-deep)}
+  .freeform button:active{transform:scale(.98)}
+
+  /* ---------- loading ---------- */
+  .loading{display:flex; align-items:center; gap:12px; padding:34px 4px; color:var(--muted); font-size:14px}
+  .spinner{width:15px; height:15px; border:2px solid var(--line); border-top-color:var(--accent); border-radius:50%; animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ---------- report ---------- */
+  .report{margin-top:30px}
+  .stagger>*{opacity:0; transform:translateY(10px); animation:rise .6s cubic-bezier(.2,.7,.3,1) forwards}
+  .stagger>*:nth-child(1){animation-delay:.02s} .stagger>*:nth-child(2){animation-delay:.09s}
+  .stagger>*:nth-child(3){animation-delay:.16s} .stagger>*:nth-child(4){animation-delay:.23s}
+  .stagger>*:nth-child(5){animation-delay:.30s}
+  @keyframes rise{to{opacity:1; transform:none}}
+
+  .report-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:22px}
+  .variant-name{font-family:var(--serif); font-size:33px; font-weight:500; letter-spacing:-.015em; line-height:1.1}
+  .variant-gene{font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin-bottom:7px}
+  .sources{display:flex; gap:7px; flex-wrap:wrap}
+  .src{font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; padding:5px 9px; border-radius:20px; border:1px solid var(--line); color:var(--muted); background:var(--surface); white-space:nowrap}
+  .src b{font-weight:500; color:var(--ink-soft)}
+  .src.ok{border-color:var(--accent-soft); color:var(--accent)} .src.ok b{color:var(--accent)}
+  .src.empty{color:var(--muted)}
+  .src.error,.src.timeout{border-color:var(--critical-line); color:var(--critical); background:var(--critical-bg)}
+
+  /* verdict */
+  .verdict{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 24px; box-shadow:var(--shadow)}
+  .verdict-label{font-family:var(--mono); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted)}
+  .verdict-class{font-family:var(--serif); font-size:30px; font-weight:500; margin:8px 0 6px; letter-spacing:-.01em; display:flex; align-items:center; gap:13px}
+  .cdot{width:11px; height:11px; border-radius:50%; flex:none; box-shadow:0 0 0 4px currentColor; opacity:.9}
+  .verdict-basis{font-size:14px; color:var(--ink-soft); max-width:60ch}
+
+  /* audit toggle */
+  .audit-toggle{
+    display:flex; align-items:center; justify-content:space-between; gap:18px; margin-top:18px;
+    background:linear-gradient(180deg,var(--surface),var(--surface-2)); border:1px solid var(--line);
+    border-radius:16px; padding:18px 22px; box-shadow:var(--shadow); transition:border-color .3s, box-shadow .3s;
+  }
+  .audit-toggle.on{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent-soft), var(--shadow-lift)}
+  .audit-title{font-family:var(--serif); font-size:20px; font-weight:500}
+  .audit-sub{font-size:13px; color:var(--muted); margin-top:3px; max-width:44ch}
+  .switch{
+    flex:none; width:70px; height:34px; border-radius:20px; border:1px solid var(--line); background:var(--surface-2);
+    position:relative; cursor:pointer; transition:background .28s, border-color .28s; padding:0;
+  }
+  .switch .knob{position:absolute; top:3px; left:3px; width:26px; height:26px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.2); transition:transform .28s cubic-bezier(.2,.7,.3,1)}
+  .switch .lbl{position:absolute; font-family:var(--mono); font-size:9px; letter-spacing:.12em; top:50%; transform:translateY(-50%); color:var(--muted); transition:opacity .2s}
+  .switch .lbl.off{right:9px} .switch .lbl.on{left:10px; color:#fff; opacity:0}
+  .switch[aria-checked="true"]{background:var(--accent); border-color:var(--accent)}
+  .switch[aria-checked="true"] .knob{transform:translateX(36px)}
+  .switch[aria-checked="true"] .lbl.off{opacity:0} .switch[aria-checked="true"] .lbl.on{opacity:1}
+  .switch:not([aria-checked="true"]){animation:hintpulse 2.6s ease-in-out infinite}
+  @keyframes hintpulse{0%,100%{box-shadow:0 0 0 0 rgba(12,93,87,0)}50%{box-shadow:0 0 0 5px rgba(12,93,87,.07)}}
+
+  .audit-body{overflow:hidden}
+  .audit-body[hidden]{display:none}
+  .audit-body>*{animation:rise .5s cubic-bezier(.2,.7,.3,1) both}
+
+  /* warnings */
+  .section-label{font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin:26px 0 13px; display:flex; align-items:center; gap:10px}
+  .section-label::after{content:""; height:1px; background:var(--line); flex:1}
+  .warn{border:1px solid var(--line); border-left-width:3px; border-radius:12px; padding:15px 17px; margin-bottom:11px; background:var(--surface)}
+  .warn.caution{border-left-color:var(--caution); background:var(--caution-bg); border-color:var(--caution-line)}
+  .warn.critical{border-left-color:var(--critical); background:var(--critical-bg); border-color:var(--critical-line)}
+  .warn-head{display:flex; align-items:center; gap:10px; margin-bottom:6px}
+  .warn-sev{font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; padding:3px 8px; border-radius:20px; font-weight:600}
+  .warn.caution .warn-sev{background:var(--caution); color:#fff} .warn.critical .warn-sev{background:var(--critical); color:#fff}
+  .warn-trigger{font-family:var(--mono); font-size:12px; color:var(--ink-soft); font-weight:500}
+  .warn-msg{font-weight:600; font-size:14.5px; margin-bottom:4px}
+  .warn.caution .warn-msg{color:#6f4d0e} .warn.critical .warn-msg{color:#6f231c}
+  .warn-detail{font-size:13.5px; color:var(--ink-soft); line-height:1.5}
+  .warn-cite{font-family:var(--mono); font-size:10.5px; color:var(--muted); margin-top:9px; padding-top:9px; border-top:1px dashed var(--line)}
+
+  /* reasoning */
+  .reasoning{margin-top:6px}
+  .layer{border:1px solid var(--line); border-radius:14px; padding:0; margin-bottom:12px; background:var(--surface); overflow:hidden; box-shadow:var(--shadow)}
+  .layer-head{display:flex; align-items:center; gap:13px; padding:15px 18px; border-bottom:1px solid var(--line-soft); background:var(--surface-2)}
+  .layer-num{font-family:var(--mono); font-size:12px; font-weight:600; color:#fff; background:var(--accent); width:27px; height:27px; border-radius:8px; display:grid; place-items:center; flex:none}
+  .layer.muted .layer-num{background:var(--faint)}
+  .layer-title{font-family:var(--serif); font-size:17px; font-weight:500; flex:1}
+  .layer-status{font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; padding:4px 9px; border-radius:20px; color:var(--muted); border:1px solid var(--line)}
+  .layer-status.reasoned{color:var(--accent); border-color:var(--accent-soft); background:var(--accent-soft)}
+  .layer-status.streaming{color:var(--accent); border-color:var(--accent)}
+  .layer-status.degraded,.layer-status.no_findings{color:var(--faint)}
+  .layer-status.unavailable{color:var(--critical); border-color:var(--critical-line); background:var(--critical-bg)}
+  .layer-body{padding:16px 18px; font-size:14.5px; line-height:1.62; color:var(--ink-soft)}
+  .layer-body p{margin:0 0 11px} .layer-body p:last-child{margin:0}
+  .layer-body strong{color:var(--ink); font-weight:600}
+  .layer-body.note{color:var(--muted); font-style:italic; font-size:13.5px}
+  .layer-guard{font-family:var(--mono); font-size:10px; letter-spacing:.06em; color:var(--accent); margin-top:12px; display:inline-flex; align-items:center; gap:6px}
+  .layer-guard::before{content:"✓"; font-weight:600}
+  .caret{display:inline-block; width:8px; height:1.05em; background:var(--accent); margin-left:2px; vertical-align:-2px; animation:blink 1s steps(2) infinite; border-radius:1px}
+  @keyframes blink{50%{opacity:0}}
+  .layer-findings{font-family:var(--mono); font-size:10.5px; color:var(--muted); padding:0 18px 15px; margin-top:-4px}
+  .layer-findings .lf{padding:6px 0; border-top:1px dashed var(--line); line-height:1.5}
+  .layer-findings .lf::before{content:"trace · "; color:var(--faint)}
+
+  /* evidence */
+  .evidence{margin-top:28px}
+  .row{display:flex; gap:14px; padding:14px 0; border-top:1px solid var(--line)}
+  .row:first-of-type{border-top:1px solid var(--ink); border-top-width:1.5px}
+  .row-key{flex:none; width:104px}
+  .code{font-family:var(--mono); font-size:14px; font-weight:600; color:var(--ink); display:inline-block}
+  .code .st{font-weight:400; color:var(--accent)}
+  .row-src{font-family:var(--mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-top:4px}
+  .row-val{flex:1; font-size:14px; color:var(--ink-soft)}
+  .row-val .cite{font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:6px; display:block}
+  .mono{font-family:var(--mono)}
+  .data-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px 20px; margin-top:2px}
+  .data-cell .dk{font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+  .data-cell .dv{font-family:var(--mono); font-size:15px; font-weight:500; color:var(--ink); margin-top:3px}
+  .data-cell .dv small{font-size:11px; color:var(--muted); font-weight:400}
+  .data-cell.flag .dv{color:var(--caution)}
+  .tag-pill{display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.06em; padding:3px 8px; border-radius:6px; background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft)}
+  .tag-pill.path{background:var(--critical-bg); border-color:var(--critical-line); color:var(--critical)}
+  .tag-pill.ben{background:#EBF1EC; border-color:#CADBCD; color:var(--benign)}
+  .tag-pill.conf{background:var(--caution-bg); border-color:var(--caution-line); color:var(--caution)}
+  .empty-note{font-size:13px; color:var(--muted); font-style:italic}
+  .err-box{border:1px solid var(--critical-line); background:var(--critical-bg); color:var(--critical); border-radius:12px; padding:16px 18px; font-size:14px}
+
+  /* footer */
+  .foot{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; line-height:1.7}
+  .foot .fline{font-weight:600; color:var(--ink-soft); font-size:13px; margin-bottom:8px}
+  .foot code{font-family:var(--mono); font-size:11px; color:var(--accent)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand">VUS · Lens</div>
+    <h1 class="tagline">It aggregates the evidence, then <em>declares where that evidence is unreliable</em> for the patient in front of you.</h1>
+    <div class="disclaimer">Decision support — not a classifier, not a diagnosis.</div>
+  </header>
+
+  <section class="selector">
+    <div class="selector-label">Select a variant</div>
+    <div class="chips" id="chips"></div>
+    <form class="freeform" id="freeform" autocomplete="off">
+      <input id="rsid" placeholder="…or query a live rsID, e.g. rs1800562" aria-label="rsID">
+      <button type="submit">Evaluate</button>
+    </form>
+  </section>
+
+  <div class="loading" id="loading" hidden><span class="spinner"></span><span id="loadingText">Querying public sources…</span></div>
+
+  <main class="report" id="report" hidden></main>
+
+  <footer class="foot">
+    <div class="fline">Decision support — not a classifier, not a diagnosis. The interpretation, and the clinical decision, belong to the clinician.</div>
+    Deterministic ACMG mapping (no LLM) · confidence audit + plain-language reasoning by <code>claude-opus-4-8</code>, which never assigns or alters the class.
+    Open public data only: MyVariant.info · gnomAD v4 · Turkish Variome (CC BY) · ClinVar.
+  </footer>
+</div>
+
+<script>
+const $ = (s,r=document)=>r.querySelector(s);
+const el = (t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
+const esc = s => (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function mdLite(t){
+  let s = esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  return s.split(/\n\n+/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+}
+function fmtNum(x){
+  if(x==null) return '—';
+  if(x===0) return '0';
+  if(Math.abs(x) < 1e-3 || Math.abs(x) >= 1e5) return x.toExponential(2);
+  return (+x).toPrecision(3).replace(/\.?0+$/,'');
+}
+const CLASS_COLOR = {'Benign':'var(--benign)','Likely benign':'var(--benign)','Uncertain significance':'var(--vus)','Likely pathogenic':'var(--path)','Pathogenic':'var(--path)'};
+
+let state = { key:null, card:null, auditOn:false, reasoningStarted:false, es:null };
+
+async function loadVariants(){
+  const r = await fetch('/api/variants'); const list = await r.json();
+  const box = $('#chips'); box.innerHTML='';
+  list.forEach(v=>{
+    const c = el('button','chip');
+    c.innerHTML = `<span class="chip-tag">${esc(v.tag)}</span><div class="chip-label">${esc(v.label)}</div><div class="chip-note">${esc(v.note)}</div>`;
+    c.onclick = ()=>{ document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active')); c.classList.add('active'); evaluate({id:v.id}); };
+    box.appendChild(c);
+  });
+}
+
+async function evaluate(payload){
+  if(state.es){ state.es.close(); state.es=null; }
+  state.reasoningStarted=false;
+  $('#report').hidden = true;
+  const load = $('#loading'); load.hidden=false; $('#loadingText').textContent='Querying public sources…';
+  try{
+    const r = await fetch('/api/evaluate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data = await r.json();
+    load.hidden=true;
+    if(!r.ok || data.error){ renderError(data.error||('HTTP '+r.status)); return; }
+    state.key = data.key; state.card = data;
+    renderReport(data);
+  }catch(e){ load.hidden=true; renderError(e.message); }
+}
+
+function renderError(msg){
+  const R=$('#report'); R.hidden=false; R.className='report';
+  R.innerHTML=''; R.appendChild(el('div','err-box','<strong>Evaluation failed.</strong> '+esc(msg)));
+}
+
+function srcPill(name,status){ return `<span class="src ${esc(status)}"><b>${esc(name)}</b> ${esc(status)}</span>`; }
+
+function renderReport(d){
+  const R = $('#report'); R.hidden=false; R.className='report stagger'; R.innerHTML='';
+
+  // head
+  const head = el('div','report-head');
+  head.innerHTML = `<div><div class="variant-gene">${esc(d.gene||'—')}</div><div class="variant-name">${esc(d.query)}</div></div>
+    <div class="sources">${srcPill('MyVariant',d.sources.myvariant)}${srcPill('gnomAD',d.sources.gnomad)}${srcPill('Turkish Variome',d.sources.turkish_variome)}</div>`;
+  R.appendChild(head);
+
+  // verdict
+  const col = CLASS_COLOR[d.acmg_class]||'var(--muted)';
+  const verdict = el('div','verdict');
+  verdict.innerHTML = `<div class="verdict-label">Deterministic ACMG classification · no LLM</div>
+    <div class="verdict-class"><span class="cdot" style="color:${col}"></span>${esc(d.acmg_class)}</div>
+    <div class="verdict-basis">${esc(d.class_basis)}</div>`;
+  R.appendChild(verdict);
+
+  // toggle
+  const tog = el('div','audit-toggle');
+  tog.id='auditToggle';
+  tog.innerHTML = `<div class="audit-toggle-text"><div class="audit-title">Confidence Audit</div>
+    <div class="audit-sub">Reveal where the evidence is unreliable for this patient — with Claude's reasoning, streamed live.</div></div>
+    <button class="switch" id="switch" role="switch" aria-checked="false"><span class="lbl off">OFF</span><span class="lbl on">ON</span><span class="knob"></span></button>`;
+  R.appendChild(tog);
+
+  // audit body (warnings + reasoning)
+  const body = el('div','audit-body'); body.id='auditBody'; body.hidden=true;
+  body.appendChild(renderWarnings(d.warnings));
+  const reason = el('div','reasoning'); reason.id='reasoning'; body.appendChild(reason);
+  R.appendChild(body);
+
+  // evidence card (always visible)
+  R.appendChild(renderEvidence(d));
+
+  // wire toggle
+  const sw = $('#switch');
+  sw.onclick = ()=> setAudit(!state.auditOn);
+  state.auditOn=false;
+  // restore audit state across re-selection? keep OFF each new variant (the demo beat)
+}
+
+function renderWarnings(warnings){
+  const wrap = el('div');
+  wrap.appendChild(el('div','section-label','Confidence warnings — declared'));
+  if(!warnings.length){ wrap.appendChild(el('div','empty-note','No confidence trigger fired for this variant.')); return wrap; }
+  warnings.forEach(w=>{
+    const c = el('div','warn '+esc(w.severity));
+    c.innerHTML = `<div class="warn-head"><span class="warn-sev">${esc(w.severity)}</span><span class="warn-trigger">${esc(w.trigger)}</span></div>
+      <div class="warn-msg">${esc(w.message)}</div><div class="warn-detail">${esc(w.detail)}</div>
+      ${w.citation?`<div class="warn-cite">${esc(w.citation)}</div>`:''}`;
+    wrap.appendChild(c);
+  });
+  return wrap;
+}
+
+function renderEvidence(d){
+  const wrap = el('div','evidence');
+  wrap.appendChild(el('div','section-label','Evidence — transparent & cited'));
+
+  // criteria
+  if(d.criteria.length){
+    d.criteria.forEach(c=>{
+      const row = el('div','row');
+      const st = c.strength?` <span class="st">· ${esc(c.strength)}</span>`:'';
+      row.innerHTML = `<div class="row-key"><span class="code">${esc(c.criterion)}${st}</span><div class="row-src">${esc(c.source)}</div></div>
+        <div class="row-val">${esc(c.reason)}<span class="cite">${esc(c.citation)}</span></div>`;
+      wrap.appendChild(row);
+    });
+  } else {
+    const row = el('div','row');
+    row.innerHTML = `<div class="row-key"><span class="code">—</span><div class="row-src">criteria</div></div><div class="row-val empty-note">No ACMG criteria met the assignment rules.</div>`;
+    wrap.appendChild(row);
+  }
+
+  // in-silico
+  const ins=d.insilico; const rowI=el('div','row');
+  let insVal = `REVEL <span class="mono">${fmtNum(ins.revel)}</span> → <span class="mono">${esc(ins.band)}</span>`;
+  if(ins.crosscheck_note) insVal += `<span class="cite">AlphaMissense cross-check (Layer 2): ${esc(ins.crosscheck_note)}</span>`;
+  rowI.innerHTML = `<div class="row-key"><span class="code">in-silico</span><div class="row-src">${esc(ins.spec_source)} · ${esc(ins.tool)}</div></div><div class="row-val">${insVal}</div>`;
+  wrap.appendChild(rowI);
+
+  // clinvar
+  const cv=d.clinvar; const rowC=el('div','row');
+  const pills = cv.significances.length ? cv.significances.map(s=>{
+    const l=s.toLowerCase(); let cls=''; if(l.includes('pathogenic')&&!l.includes('conflict'))cls='path'; else if(l==='benign'||l==='likely benign')cls='ben'; else if(l.includes('conflict'))cls='conf';
+    return `<span class="tag-pill ${cls}">${esc(s)}</span>`;
+  }).join(' ') : '<span class="empty-note">no ClinVar submissions</span>';
+  rowC.innerHTML = `<div class="row-key"><span class="code">ClinVar</span><div class="row-src">surfaced, not judged</div></div><div class="row-val">${pills}</div>`;
+  wrap.appendChild(rowC);
+
+  // frequency / gnomAD
+  const rowF=el('div','row');
+  if(d.gnomad){
+    const g=d.gnomad; const needy = (g.mid_an!=null && g.mid_an<30000);
+    rowF.innerHTML = `<div class="row-key"><span class="code">gnomAD v4</span><div class="row-src">ancestry-aware</div></div>
+      <div class="row-val"><div class="data-grid">
+        <div class="data-cell"><div class="dk">global AF</div><div class="dv">${fmtNum(g.global_af)}</div></div>
+        <div class="data-cell"><div class="dk">grpmax FAF95</div><div class="dv">${fmtNum(g.grpmax_faf)} <small>${esc(g.grpmax_pop||'')}</small></div></div>
+        <div class="data-cell ${needy?'flag':''}"><div class="dk">Middle Eastern · AN</div><div class="dv">${g.mid_an==null?'—':g.mid_an.toLocaleString('en-US')} <small>AC ${g.mid_ac}</small></div></div>
+      </div></div>`;
+  } else {
+    rowF.innerHTML = `<div class="row-key"><span class="code">gnomAD v4</span><div class="row-src">ancestry-aware</div></div><div class="row-val empty-note">Frequency unavailable — ${esc(d.sources.gnomad)} (not read as absent).</div>`;
+  }
+  wrap.appendChild(rowF);
+  return wrap;
+}
+
+function setAudit(on){
+  state.auditOn=on;
+  const sw=$('#switch'), body=$('#auditBody'), tog=$('#auditToggle');
+  sw.setAttribute('aria-checked', on?'true':'false');
+  tog.classList.toggle('on', on);
+  body.hidden=!on;
+  if(on && !state.reasoningStarted){ startReasoning(state.key, state.card.reasoning_plan); state.reasoningStarted=true; }
+}
+
+function layerSlot(p){
+  const panel = el('div','layer'+(p.status==='reasoned'?'':' muted'));
+  panel.innerHTML = `<div class="layer-head"><span class="layer-num">0${p.layer}</span><span class="layer-title">${esc(p.title)}</span><span class="layer-status ${esc(p.status)}" id="lst-${p.layer}">${esc(p.status.replace('_',' '))}</span></div>
+    <div class="layer-body ${p.status==='reasoned'?'':'note'}" id="lb-${p.layer}"></div>`;
+  return panel;
+}
+
+function startReasoning(key, plan){
+  const box=$('#reasoning'); box.innerHTML='';
+  box.appendChild(el('div','section-label','Reasoning · claude-opus-4-8 · audits, never decides'));
+  const acc={};
+  plan.forEach(p=>{
+    box.appendChild(layerSlot(p));
+    const body=$('#lb-'+p.layer);
+    if(p.status==='reasoned'){ body.innerHTML='<span class="caret"></span>'; }
+    else {
+      body.innerHTML = esc(p.note||'');
+      if(p.findings && p.findings.length && p.status!=='reasoned'){}
+    }
+  });
+  if(!plan.some(p=>p.status==='reasoned')) return;
+
+  const es = new EventSource('/api/reason?key='+encodeURIComponent(key));
+  state.es = es;
+  es.onmessage = (e)=>{
+    const evt = JSON.parse(e.data);
+    if(evt.type==='layer_start'){ acc[evt.layer]=''; const b=$('#lb-'+evt.layer); if(b){b.classList.remove('note'); b.innerHTML='<span class="caret"></span>';} setLStatus(evt.layer,'streaming'); }
+    else if(evt.type==='delta'){ acc[evt.layer]=(acc[evt.layer]||'')+evt.text; const b=$('#lb-'+evt.layer); if(b) b.innerHTML=mdLite(acc[evt.layer])+'<span class="caret"></span>'; }
+    else if(evt.type==='layer_done'){ const b=$('#lb-'+evt.layer); if(b){ b.innerHTML=mdLite(acc[evt.layer]||''); if(evt.guardrail && evt.guardrail.length===0){ b.appendChild(el('div','layer-guard','guardrail clean · no self-classification')); } else if(evt.guardrail){ b.appendChild(el('div','layer-guard','guardrail: '+esc(evt.guardrail.join('; ')))); } } setLStatus(evt.layer,'reasoned'); }
+    else if(evt.type==='layer'){ const b=$('#lb-'+evt.layer); if(b){ b.classList.add('note'); b.innerHTML=esc(evt.text);} setLStatus(evt.layer, evt.status); }
+    else if(evt.type==='done'){ es.close(); state.es=null; }
+    else if(evt.type==='error'){ const box2=$('#reasoning'); box2.appendChild(el('div','err-box','Reasoning stream error: '+esc(evt.message))); es.close(); state.es=null; }
+  };
+  es.onerror = ()=>{ es.close(); state.es=null; state.reasoningStarted=false;
+    plan.forEach(p=>{ if(p.status==='reasoned' && !acc[p.layer]){ const b=$('#lb-'+p.layer); if(b){ b.classList.add('note'); b.innerHTML='Reasoning stream interrupted — toggle the audit off and on to retry.'; } setLStatus(p.layer,'unavailable'); } }); };
+}
+function setLStatus(layer,status){ const s=$('#lst-'+layer); if(s){ s.className='layer-status '+status; s.textContent=status; } const p=s?s.closest('.layer'):null; if(p && status!=='degraded' && status!=='no_findings' && status!=='unavailable') p.classList.remove('muted'); }
+
+$('#freeform').addEventListener('submit', (e)=>{ e.preventDefault(); const v=$('#rsid').value.trim(); if(v){ document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active')); evaluate({rsid:v}); } });
+loadVariants();
+</script>
+</body>
+</html>

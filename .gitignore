@@ -229,6 +229,10 @@ data/turkish_variome/raw/
 # Local verification scratch output
 scripts/_scratch/
 
+# UI verification artifacts (rendered screenshots + Playwright output dir)
+vus-*.png
+.playwright-mcp/
+
 # Strategic build briefs: name a clinician (PII/KVKK) + competition strategy.
 # These must NEVER enter the public repo.
 CLAUDE_CODE_BUILD_BRIEF.md
