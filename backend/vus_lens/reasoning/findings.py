@@ -73,13 +73,20 @@ def _clinvar_line(ev: EvaluationResult) -> str:
     )
 
 
+def _g(x) -> str:
+    """Format a float to 3 significant figures so the model receives clean numbers
+    (the raw gnomAD FAF can carry float noise like 2.999999999999999e-07) — the
+    value is unchanged, only its printed form."""
+    return f"{x:.3g}" if isinstance(x, float) else str(x)
+
+
 def _key_numbers(ev: EvaluationResult) -> tuple[str, ...]:
     nums: list[str] = []
     f = ev.frequency
     if f.data_available and ev.gnomad.is_ok:
         nums.append(
-            f"gnomAD grpmax filtering AF (FAF95) = {f.grpmax_faf}; raw grpmax AF = {f.grpmax_af}; "
-            f"global AF = {f.global_af} [spec: {f.spec_source} {f.spec_label}]"
+            f"gnomAD grpmax filtering AF (FAF95) = {_g(f.grpmax_faf)}; raw grpmax AF = {_g(f.grpmax_af)}; "
+            f"global AF = {_g(f.global_af)} [spec: {f.spec_source} {f.spec_label}]"
         )
         from ..clients.gnomad import ancestry_allele_number
 

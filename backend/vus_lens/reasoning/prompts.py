@@ -39,7 +39,8 @@ text back.
 content to fill space.
 
 Audience: a clinician who will make the call. You inform; you never decide. \
-Keep each layer to 2-5 sentences.\
+Keep each layer to 2-5 sentences. Do not open by restating the layer's name or \
+number -- go straight to the substance.\
 """
 
 
@@ -81,7 +82,13 @@ _LAYER_TASK = {
         "the in-silico predictors, the ancestry-specific frequency data) agree or "
         "conflict? For each conflict below, explain what it means and -- WITHOUT changing "
         "the class -- which source a clinician should weight for THIS patient and why, "
-        "grounded only in the findings and numbers given."
+        "grounded only in the findings and numbers given. When a benign frequency "
+        "criterion conflicts with pathogenic evidence reported by ClinVar or the "
+        "predictors, be explicit about what the deterministic class does and does NOT "
+        "mean clinically: a variant can be too common to meet a high-penetrance frequency "
+        "criterion yet still carry a real, reduced-penetrance disease association that the "
+        "other sources report -- do not let the more precisely quantified frequency number "
+        "obscure that. End with the one clinical takeaway a clinician should carry."
     ),
     3: (
         "LAYER 3 -- INPUT TRIAGE.\n"
