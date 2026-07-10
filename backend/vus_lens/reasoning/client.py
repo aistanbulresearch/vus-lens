@@ -100,5 +100,34 @@ class ClaudeReasoner:
         text = "".join(b.text for b in message.content if b.type == "text").strip()
         return text, guardrail_violations(text)
 
+    async def reason_stream(self, system: str, user: str):
+        """Async generator for the web UI: yields ('delta', text) as tokens arrive,
+        then a final ('done', guardrail_violations). Uses AsyncAnthropic streaming so
+        a FastAPI endpoint can forward the reasoning to the browser live.
+
+        Raises ReasoningUnavailable if no credential resolves.
+        """
+        if not self.available():
+            raise ReasoningUnavailable(
+                "No ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN resolved. The deterministic "
+                "evaluation and auditor run without a key; the plain-language reasoning "
+                "layer calls claude-opus-4-8 at runtime and needs a credential."
+            )
+        import anthropic  # lazy: keep the SDK optional until reasoning runs
+
+        client = anthropic.AsyncAnthropic()
+        parts: list[str] = []
+        async with client.messages.stream(
+            model=self.model,
+            max_tokens=1500,
+            system=system,
+            thinking={"type": "adaptive"},
+            messages=[{"role": "user", "content": user}],
+        ) as stream:
+            async for text in stream.text_stream:
+                parts.append(text)
+                yield ("delta", text)
+        yield ("done", guardrail_violations("".join(parts).strip()))
+
 
 __all__ = ["ClaudeReasoner", "ReasoningUnavailable", "credentials_available", "guardrail_violations", "MODEL"]
