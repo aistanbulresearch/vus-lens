@@ -119,6 +119,11 @@ async def cohort_panel() -> HTMLResponse:
     return HTMLResponse((STATIC / "cohort.html").read_text(encoding="utf-8"))
 
 
+@app.get("/validation")
+async def validation_panel() -> HTMLResponse:
+    return HTMLResponse((STATIC / "validation.html").read_text(encoding="utf-8"))
+
+
 @app.get("/api/cohort")
 async def cohort_data() -> JSONResponse:
     if not _COHORT_RESULT.exists():
