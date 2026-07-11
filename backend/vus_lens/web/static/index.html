@@ -223,6 +223,12 @@
   .foot{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; line-height:1.7}
   .foot .fline{font-weight:600; color:var(--ink-soft); font-size:13px; margin-bottom:8px}
   .foot code{font-family:var(--mono); font-size:11px; color:var(--accent)}
+  /* plain-language layer — human-readable copy above the technical detail */
+  .plain-lead{margin:0 0 6px; padding:17px 20px; border-radius:14px; background:linear-gradient(180deg,var(--accent-soft),#EBF3F1); border:1px solid #CFE2DD}
+  .plain-eyebrow{font-family:var(--mono); font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:9px; display:flex; align-items:center; gap:8px}
+  .plain-eyebrow::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--accent)}
+  .plain-lead p{margin:0; font-family:var(--serif); font-size:18.5px; line-height:1.46; color:var(--ink); letter-spacing:-.005em}
+  .plain-line{font-size:13.5px; line-height:1.5; color:var(--ink-soft); font-style:italic; border-left:2px solid var(--accent); padding:1px 0 1px 12px; margin:0 0 11px}
   [hidden]{display:none !important}
 </style>
 </head>
@@ -270,6 +276,36 @@ function fmtNum(x){
 }
 const CLASS_COLOR = {'Benign':'var(--benign)','Likely benign':'var(--benign)','Uncertain significance':'var(--vus)','Likely pathogenic':'var(--path)','Pathogenic':'var(--path)'};
 
+// --- plain-language layer: translate the real detection into one human read.
+// Every line = what the tool catches + why catching it can matter. Conditional
+// mood throughout; the tool is the first step that keeps a door open, never the
+// agent of the outcome; no claim beyond what the detection already shows.
+const HRR = new Set(['ATM','PALB2','BRCA1','BRCA2','CHEK2','BARD1','BRIP1','RAD51C','RAD51D','NBN']);
+const LYNCH = new Set(['MLH1','MSH2','MSH6','PMS2','EPCAM']);
+const hasWarn = (d,t)=> (d.warnings||[]).some(w=>w.trigger.startsWith(t));
+function bottomLine(d){
+  const g=(d.gene||'').toUpperCase();
+  if(hasWarn(d,'6.2')) return `This gene can cause disease through a stretch of repeated DNA that this kind of test can't measure — so a "normal" result here can be falsely reassuring. The tool flags that the wrong instrument was used, so a clinician can order a targeted test rather than close the case on an all-clear that isn't one.`;
+  if(HRR.has(g)) return `In an HRR gene like ${esc(d.gene)}, a variant left wrongly "benign" can quietly close off a therapy the patient might have qualified for. Flagging that it's really uncertain is what keeps that door open.`;
+  if(LYNCH.has(g)) return `In a Lynch-syndrome gene like ${esc(d.gene)}, whether a change is real can shape a family's cancer-screening plan. Here the predictors are split and the ancestry data is thin, so the tool flags it as genuinely uncertain — keeping the question open rather than closing it early.`;
+  if(d.acmg_class==='Benign' && d.clinvar.has_pathogenic) return `This change is common enough that the usual rule calls it "benign" — but common doesn't mean harmless. The tool surfaces that the databases still flag it as a real, lower-risk disease variant, so a clinician can weigh it rather than dismiss it.`;
+  return `Left as an unexplained "uncertain," a variant like this can stall a patient's care. The tool shows where the evidence is thin — and where it can't be trusted for this patient — so the question can stay open instead of being closed too early.`;
+}
+function warnPlain(t){
+  if(t.startsWith('6.1')) return `For a Turkish patient, that "rare — likely benign" call rests on almost no data. Catching it keeps a variant that deserves a second look from being closed — and with it, an option that second look might have opened.`;
+  if(t.startsWith('6.2')) return `The standard test can't size the repeat that actually causes this disease — so a "normal-range" read here doesn't rule it out. Catching that keeps the case from being closed on a test that couldn't answer the question; a targeted test still could.`;
+  if(t.startsWith('6.3')) return `This lookup came back empty — but empty means "we don't know," not "safe." The tool flags the gap instead of reading silence as reassurance.`;
+  return null;
+}
+function insilicoPlain(d){
+  const note=(d.insilico.crosscheck_note||'').toLowerCase(), band=(d.insilico.band||'').toLowerCase();
+  const amPath=note.includes('alphamissense pathogenic'), amBen=note.includes('alphamissense benign'), pp3=band.includes('pp3'), indet=band==='indeterminate';
+  if(amPath && indet) return `AlphaMissense flags this pathogenic — but alone it isn't enough under ACMG. Separating the real signal keeps the geneticist's attention on the variants that actually warrant it.`;
+  if(amBen && pp3) return `One AI predictor calls this damaging, another calls it benign — they don't agree. The tool shows the split rather than trusting either alone, so a genuinely uncertain variant isn't called too early.`;
+  if(amPath && pp3) return `Both protein predictors point to harm — the tool surfaces that signal even when the variant is common enough for the frequency rule to call it "benign," so a clinician can weigh it rather than dismiss it on frequency alone.`;
+  return null;
+}
+
 let state = { key:null, card:null, auditOn:false, reasoningStarted:false, es:null };
 
 async function loadVariants(){
@@ -314,6 +350,9 @@ function renderReport(d){
     <div class="sources">${srcPill('MyVariant',d.sources.myvariant)}${srcPill('gnomAD',d.sources.gnomad)}${srcPill('Turkish Variome',d.sources.turkish_variome)}</div>`;
   R.appendChild(head);
 
+  // plain-language bottom line — the one-read takeaway, before the technical card
+  R.appendChild(el('div','plain-lead', `<div class="plain-eyebrow">In plain terms</div><p>${bottomLine(d)}</p>`));
+
   // verdict
   const col = CLASS_COLOR[d.acmg_class]||'var(--muted)';
   const verdict = el('div','verdict');
@@ -351,6 +390,8 @@ function renderWarnings(warnings){
   wrap.appendChild(el('div','section-label','Confidence warnings — declared'));
   if(!warnings.length){ wrap.appendChild(el('div','empty-note','No confidence trigger fired for this variant.')); return wrap; }
   warnings.forEach(w=>{
+    const pl = warnPlain(w.trigger);
+    if(pl) wrap.appendChild(el('div','plain-line', pl));
     const c = el('div','warn '+esc(w.severity));
     c.innerHTML = `<div class="warn-head"><span class="warn-sev">${esc(w.severity)}</span><span class="warn-trigger">${esc(w.trigger)}</span></div>
       <div class="warn-msg">${esc(w.message)}</div><div class="warn-detail">${esc(w.detail)}</div>
@@ -380,6 +421,8 @@ function renderEvidence(d){
   }
 
   // in-silico
+  const insP = insilicoPlain(d);
+  if(insP) wrap.appendChild(el('div','plain-line', insP));
   const ins=d.insilico; const rowI=el('div','row');
   let insVal = `REVEL <span class="mono">${fmtNum(ins.revel)}</span> → <span class="mono">${esc(ins.band)}</span>`;
   if(ins.crosscheck_note) insVal += `<span class="cite">AlphaMissense cross-check (Layer 2): ${esc(ins.crosscheck_note)}</span>`;
