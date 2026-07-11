@@ -91,9 +91,19 @@
 const pct = (a,b)=> b ? Math.round(a/b*100) : 0;
 const nf = n => n.toLocaleString('en-US');
 
-fetch('/api/cohort').then(r=>r.json()).then(render).catch(e=>{
-  document.getElementById('body').innerHTML = `<div class="err">Could not load cohort result: ${e.message}. Run <code>scripts/cohort_batch.py --full</code>.</div>`;
-});
+// Baked-in committed result (data/cohort/cohort_result.json, deterministic run
+// retrieved 2026-07-11) so the panel is fully self-contained -- it renders whether
+// opened as a standalone file or served by the app; no fetch, no server required.
+// Regenerate + re-embed via: uv run --no-sync python scripts/cohort_batch.py --full
+const COHORT = {
+  "cohort_label": "ATM/PALB2 ClinVar germline VUS, retrieved 2026-07-11",
+  "cohort_counts": {"ATM": 7824, "PALB2": 2923},
+  "N_total": 10747,
+  "could_not_evaluate": {"myvariant_unavailable": 0, "gnomad_error": 0, "absent_from_gnomad": 6544},
+  "rigor": {"N_am_pathogenic": 1987, "X_corroborated_revel_pp3": 865, "Y_not_corroborated": 1122,
+            "Y_composition": {"REVEL indeterminate": 787, "REVEL benign-direction": 95, "REVEL withheld": 240}},
+  "disparity": {"gnomad_present": 4203, "Z_mid_inadequate_rule_of_3": 3874}
+};
 
 function seg(cls, count, total, label, light){
   const w = Math.max(count/total*100, 0);
@@ -162,6 +172,8 @@ function render(d){
       Sources: MyVariant.info · gnomAD v4 (gene-bulk) · ClinVar. Rule of 3 (Hanley &amp; Lippman-Hand 1983) · REVEL/Pejaver 2022 · AlphaMissense (Cheng 2023). Regenerate: <code>uv run --no-sync python scripts/cohort_batch.py --full</code>
     </footer>`;
 }
+
+render(COHORT);
 </script>
 </body>
 </html>
