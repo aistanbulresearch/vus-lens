@@ -1,0 +1,1778 @@
+{
+  "summary": {
+    "tier": "3star",
+    "retrieved": "2026-07-11",
+    "n_total": 91,
+    "n_by_gene": {
+      "ATM": 68,
+      "PALB2": 23
+    },
+    "n_by_class": {
+      "P": 58,
+      "LP": 14,
+      "B": 14,
+      "LB": 5
+    },
+    "path": {
+      "n": 72,
+      "n_evaluated": 72,
+      "buckets": {
+        "vus_has_freq_data": 45,
+        "vus_absent_from_gnomad": 27
+      },
+      "SAFE_DIRECTION_breakers": 0,
+      "breaker_variants": []
+    },
+    "benign": {
+      "n": 19,
+      "n_correct_direction": 13,
+      "buckets": {
+        "benign_or_lb": 13,
+        "vus_has_freq_data": 6
+      }
+    },
+    "could_not_evaluate_reasons": {},
+    "by_class": {
+      "P": {
+        "vus_has_freq_data": 33,
+        "vus_absent_from_gnomad": 25
+      },
+      "LP": {
+        "vus_has_freq_data": 12,
+        "vus_absent_from_gnomad": 2
+      },
+      "B": {
+        "benign_or_lb": 13,
+        "vus_has_freq_data": 1
+      },
+      "LB": {
+        "vus_has_freq_data": 5
+      }
+    }
+  },
+  "rows": [
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108143258G>A",
+      "gnomad_id": "11-108272531-G-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108236086C>T",
+      "gnomad_id": "11-108365359-C-T",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 8e-06,
+      "grpmax_pop": "asj",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108143283T>G",
+      "gnomad_id": "11-108272556-T-G",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108115727C>T",
+      "gnomad_id": "11-108245000-C-T",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "afr",
+      "insilico_crit": "PP3",
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108216545C>T",
+      "gnomad_id": "11-108345818-C-T",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "afr",
+      "insilico_crit": "PP3",
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108216597G>C",
+      "gnomad_id": "11-108345870-G-C",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "remaining",
+      "insilico_crit": "PP3",
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108106396G>A",
+      "gnomad_id": "11-108235669-G-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108151895G>A",
+      "gnomad_id": "11-108281168-G-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "sas",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108198370A>C",
+      "gnomad_id": "11-108327643-A-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108139228_108139229insAG",
+      "gnomad_id": "11-108268501-T-TAG",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108121547del",
+      "gnomad_id": "11-108250820-AC-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108121634T>G",
+      "gnomad_id": "11-108250907-T-G",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "afr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108160410A>T",
+      "gnomad_id": "11-108289683-A-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108198392_108198393dup",
+      "gnomad_id": "11-108327665-T-TA",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108121800G>T",
+      "gnomad_id": "11-108251073-G-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "asj",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108175420C>T",
+      "gnomad_id": "11-108304693-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108224608G>A",
+      "gnomad_id": "11-108353881-G-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108213987G>A",
+      "gnomad_id": "11-108343260-G-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108172487del",
+      "gnomad_id": "11-108301760-TC-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108143540_108143542delinsTGAT",
+      "gnomad_id": "11-108272813-ATC-TGAT",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108098353T>C",
+      "gnomad_id": "11-108227626-T-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "afr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic",
+        "not provided"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108121594_108121595del",
+      "gnomad_id": "11-108250867-CAA-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108206686A>T",
+      "gnomad_id": "11-108335959-A-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108168110G>T",
+      "gnomad_id": "11-108297383-G-T",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108160486T>C",
+      "gnomad_id": "11-108289759-T-C",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": "PP3",
+      "clinvar_sig": [
+        "Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108200927T>G",
+      "gnomad_id": "11-108330200-T-G",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108196271G>A",
+      "gnomad_id": "11-108325544-G-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "fin",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108218004A>C",
+      "gnomad_id": "11-108347277-A-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108199929T>G",
+      "gnomad_id": "11-108329202-T-G",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 6.697e-05,
+      "grpmax_pop": "nfe",
+      "insilico_crit": "PP3",
+      "clinvar_sig": [
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic",
+        "risk factor"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108206689G>A",
+      "gnomad_id": "11-108335962-G-A",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Uncertain significance"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108190705C>G",
+      "gnomad_id": "11-108319978-C-G",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "mid",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108170613G>C",
+      "gnomad_id": "11-108299886-G-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108143318T>C",
+      "gnomad_id": "11-108272591-T-C",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "sas",
+      "insilico_crit": "PP3",
+      "clinvar_sig": [
+        "Conflicting interpretations of pathogenicity",
+        "Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108143299A>G",
+      "gnomad_id": "11-108272572-A-G",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.03813750000000002,
+      "grpmax_pop": "afr",
+      "insilico_crit": "BP4",
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108119715_108119716del",
+      "gnomad_id": "11-108248988-CAA-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108179837A>G",
+      "gnomad_id": "11-108309110-A-G",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108098576C>G",
+      "gnomad_id": "11-108227849-C-G",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.01365769,
+      "grpmax_pop": "nfe",
+      "insilico_crit": "BP4",
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Uncertain significance",
+        "risk factor"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108155132G>A",
+      "gnomad_id": "11-108284405-G-A",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Likely benign",
+      "freq_crit": "BS1",
+      "faf95": 0.0014199,
+      "grpmax_pop": "nfe",
+      "insilico_crit": "BP4",
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Conflicting interpretations of pathogenicity",
+        "Likely benign",
+        "no classifications from unflagged records"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108172433G>A",
+      "gnomad_id": "11-108301706-G-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": "PP3",
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic",
+        "Uncertain significance"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108138045C>T",
+      "gnomad_id": "11-108267318-C-T",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.04310546,
+      "grpmax_pop": "afr",
+      "insilico_crit": "BP4",
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Likely benign"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108143509G>T",
+      "gnomad_id": "11-108272782-G-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "remaining",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108115600C>T",
+      "gnomad_id": "11-108244873-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "afr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108129749C>T",
+      "gnomad_id": "11-108259022-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "eas",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108121588C>T",
+      "gnomad_id": "11-108250861-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108115674del",
+      "gnomad_id": "11-108244947-CT-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108155008del",
+      "gnomad_id": "11-108284281-AG-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108178641C>T",
+      "gnomad_id": "11-108307914-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "afr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108098418C>T",
+      "gnomad_id": "11-108227691-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "sas",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108115640del",
+      "gnomad_id": "11-108244913-CT-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108236203C>T",
+      "gnomad_id": "11-108365476-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "sas",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108150282C>T",
+      "gnomad_id": "11-108279555-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108106450del",
+      "gnomad_id": "11-108235723-GA-G",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108099935_108099936del",
+      "gnomad_id": "11-108229208-CAG-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108188113T>A",
+      "gnomad_id": "11-108317386-T-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108224572C>T",
+      "gnomad_id": "11-108353845-C-T",
+      "gt_star": "3*",
+      "gt_class": "LB",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely benign"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108119751del",
+      "gnomad_id": "11-108249024-AG-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108137937_108137938dup",
+      "gnomad_id": "11-108267210-G-GA",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108198391T>C",
+      "gnomad_id": "11-108327664-T-C",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.0197735,
+      "grpmax_pop": "afr",
+      "insilico_crit": "BP4",
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108175449T>C",
+      "gnomad_id": "11-108304722-T-C",
+      "gt_star": "3*",
+      "gt_class": "LB",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "afr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely benign"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108119654T>G",
+      "gnomad_id": "11-108248927-T-G",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "BS1",
+      "faf95": 0.00254081,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Conflicting interpretations of pathogenicity",
+        "Likely benign"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108122737del",
+      "gnomad_id": "11-108252010-GA-G",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108106544_108106548del",
+      "gnomad_id": "11-108235817-TCTCAG-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108216539_108216545del",
+      "gnomad_id": "11-108345812-AGTTTTCC-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108160479del",
+      "gnomad_id": "11-108289752-CT-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108196934del",
+      "gnomad_id": "11-108326207-TG-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108119667A>G",
+      "gnomad_id": "11-108248940-A-G",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Likely benign",
+      "freq_crit": "BS1",
+      "faf95": 0.0020922200000000005,
+      "grpmax_pop": "afr",
+      "insilico_crit": "BP4",
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Conflicting interpretations of pathogenicity",
+        "Likely benign",
+        "Uncertain significance"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108119770C>G",
+      "gnomad_id": "11-108249043-C-G",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.04731784000000001,
+      "grpmax_pop": "afr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Benign"
+      ]
+    },
+    {
+      "gene": "ATM",
+      "variant_id": "chr11:g.108139120G>T",
+      "gnomad_id": "11-108268393-G-T",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.06901594,
+      "grpmax_pop": "afr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Benign"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23619181T>C",
+      "gnomad_id": "16-23607860-T-C",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 7.200000000000001e-07,
+      "grpmax_pop": "mid",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23614979del",
+      "gnomad_id": "16-23603658-AC-A",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic",
+        "Pathogenic/Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23649389_23649390insG",
+      "gnomad_id": "16-23638068-A-AG",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23640552G>A",
+      "gnomad_id": "16-23629231-G-A",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23641401G>A",
+      "gnomad_id": "16-23630080-G-A",
+      "gt_star": "3*",
+      "gt_class": "LP",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely pathogenic",
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23641448A>G",
+      "gnomad_id": "16-23630127-A-G",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.004132940000000002,
+      "grpmax_pop": "amr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Likely benign"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23641461C>G",
+      "gnomad_id": "16-23630140-C-G",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.05561030000000015,
+      "grpmax_pop": "mid",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Likely benign"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23647146T>C",
+      "gnomad_id": "16-23635825-T-C",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.006021340000000001,
+      "grpmax_pop": "afr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Likely benign"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23614792G>T",
+      "gnomad_id": "16-23603471-G-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23647185G>A",
+      "gnomad_id": "16-23635864-G-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23647350_23647353del",
+      "gnomad_id": "16-23636029-CCAGA-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23647028del",
+      "gnomad_id": "16-23635707-GT-G",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23652472C>A",
+      "gnomad_id": "16-23641151-C-A",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23632683C>T",
+      "gnomad_id": "16-23621362-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "BS1",
+      "faf95": 0.00026599,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "not provided"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23641681C>T",
+      "gnomad_id": "16-23630360-C-T",
+      "gt_star": "3*",
+      "gt_class": "LB",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "BS1",
+      "faf95": 0.0004933500000000003,
+      "grpmax_pop": "afr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Benign",
+        "Likely benign"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23649247C>T",
+      "gnomad_id": "16-23637926-C-T",
+      "gt_star": "3*",
+      "gt_class": "LB",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely benign"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23647335del",
+      "gnomad_id": "16-23636014-TC-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23640576_23640587delinsTCTGA",
+      "gnomad_id": "16-23629255-AGGAAGCTCTGC-TCTGA",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23619185C>T",
+      "gnomad_id": "16-23607864-C-T",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Conflicting interpretations of pathogenicity",
+        "Likely pathogenic",
+        "Pathogenic",
+        "Uncertain significance"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23632742C>G",
+      "gnomad_id": "16-23621421-C-G",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.0035453900000000007,
+      "grpmax_pop": "eas",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Benign",
+        "Benign/Likely benign",
+        "Conflicting interpretations of pathogenicity",
+        "Likely benign",
+        "Uncertain significance"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23646275del",
+      "gnomad_id": "16-23634954-CA-C",
+      "gt_star": "3*",
+      "gt_class": "P",
+      "gt_dir": "path",
+      "mv_ok": true,
+      "gn_status": "empty",
+      "engine_class": "Uncertain significance",
+      "freq_crit": "PM2",
+      "faf95": 0.0,
+      "grpmax_pop": null,
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Pathogenic",
+        "risk factor"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23619286C>G",
+      "gnomad_id": "16-23607965-C-G",
+      "gt_star": "3*",
+      "gt_class": "B",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Benign",
+      "freq_crit": "BA1",
+      "faf95": 0.0011291699999999992,
+      "grpmax_pop": "amr",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Benign",
+        "Likely benign",
+        "Uncertain significance"
+      ]
+    },
+    {
+      "gene": "PALB2",
+      "variant_id": "chr16:g.23647688T>G",
+      "gnomad_id": "16-23636367-T-G",
+      "gt_star": "3*",
+      "gt_class": "LB",
+      "gt_dir": "ben",
+      "mv_ok": true,
+      "gn_status": "ok",
+      "engine_class": "Uncertain significance",
+      "freq_crit": null,
+      "faf95": 0.0,
+      "grpmax_pop": "nfe",
+      "insilico_crit": null,
+      "clinvar_sig": [
+        "Likely benign"
+      ]
+    }
+  ]
+}

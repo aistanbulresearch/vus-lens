@@ -227,7 +227,61 @@ at 10,747 variants as at one.
 
 ---
 
-## 7. What this tool is not
+## 7. Measured safe — validation against known-classified variants
+
+Sections 1–6 describe how the tool is *designed* to be safe. This section
+**measures** it. The same deterministic engine was run against
+**known-classified** ATM/PALB2 ClinVar variants — the ones the field already has
+an answer for — to test one property directly: **does the tool ever give false
+reassurance?**
+
+- **Ground truth.** Classified (not VUS / not conflicting) ATM/PALB2 variants
+  from ClinVar via MyVariant, at high review confidence: the **2★+** set
+  (criteria provided, multiple submitters, no conflicts — or expert panel) =
+  **1,277 known-Pathogenic/Likely-pathogenic + 1,303 known-Benign/Likely-benign**,
+  plus the **3★ expert-panel** subset as a highest-confidence core. Ground truth
+  is the classification of each variant's *strongest gold submission*, so a lone
+  single-submitter cannot relabel an expert-panel call. The demo VUS set is
+  excluded by construction (classified and VUS are disjoint).
+
+- **The safe-direction result.** Of **1,277 known-pathogenic** variants, the
+  engine returned a benign call (Benign / Likely-benign) **zero** times. Honest
+  decomposition: **397** had gnomAD frequency data — the real test, since only
+  those *could* trip a benign frequency rule (BA1/BS1), and none did, including
+  the common ones whose filtering-AF was fetched to test exactly this — and
+  **880** are absent from gnomAD (safe by absence of data). Nothing was
+  unevaluable (empty ≠ clean: **0 could-not-evaluate**). The **3★ expert-panel
+  core reproduces it: 0 false-benign.**
+
+- **The zero is a real property, not disabled logic.** The benign criteria
+  demonstrably fire: of 94 definitively-Benign variants, the engine correctly
+  called **58 (62%)** Benign. A safe-direction zero produced by an engine that
+  *can* call benign — yet never does on a pathogenic variant — is a safety
+  property, not an artifact.
+
+- **Conservative in both directions — the same honesty, measured.** The engine
+  heavily under-calls: known-pathogenic variants almost all remain VUS (it lacks
+  PS3/PM3/PP1/PVS1 and will not guess *up*), and known-Likely-benign variants
+  mostly remain VUS too — only **27 of 1,050** reach a benign call, because a lone
+  BS1 stays VUS under the ACMG combining rules. This is **not** accuracy against
+  expert panels; it is the deliberate use of an ACMG *subset* that **abstains
+  rather than guesses, in either direction.** Reported as raw counts, never as a
+  concordance percentage.
+
+- **How it was measured, with integrity.** Deterministic engine only, no LLM, $0.
+  The score path calls the *same* frequency / in-silico / ClinVar / aggregation
+  functions the demo uses, and a **parity gate** verifies it against the online
+  per-variant pipeline before scoring. A benign call requires the gnomAD **faf95**
+  filtering-AF — which the cohort gene-bulk path omits (§6) — so this validation
+  fetches real per-variant faf95 for every variant whose raw frequency is high
+  enough to possibly matter (faf95 ≤ raw AF, so a rarer variant provably cannot be
+  called benign). Without that faf95 a "0 false-benign" would be meaningless —
+  benign criteria structurally disabled rather than the engine proven safe. Result:
+  `data/validation/gt_2star.json`; regenerate via `scripts/ground_truth_validation.py`.
+
+---
+
+## 8. What this tool is not
 
 **Decision support — not a classifier, not a diagnosis.** It surfaces and
 organizes evidence and audits its own confidence. The interpretation, and the
