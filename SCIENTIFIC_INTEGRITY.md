@@ -195,7 +195,39 @@ of prompt etiquette:
 
 ---
 
-## 6. What this tool is not
+## 6. Honest at scale — the cohort batch
+
+The same deterministic engine runs across a whole cohort, and the same rules hold
+at 10,747 variants as at one.
+
+- **Cohort.** ATM/PALB2 germline VUS derived live from ClinVar via MyVariant
+  (ClinVar significance = "Uncertain significance"), retrieved 2026-07-11: 10,747
+  variants (ATM 7,824 + PALB2 2,923). The set is **predominantly germline — a
+  ClinVar significance filter, not a clean germline/somatic split** — and is stated
+  as such. (An earlier ESMO-poster snapshot was 9,534; the count grows with ClinVar.)
+
+- **The same engine, proven.** The batch calls the *identical* deterministic
+  functions the single-variant tool uses (frequency / in-silico / ClinVar /
+  aggregation / auditor) — no reimplementation. A **parity gate** checks the batch
+  path against the online per-variant pipeline on sampled variants and aborts on any
+  divergence, before the full run.
+
+- **Empty ≠ clean, at scale.** Variants that cannot be evaluated are bucketed
+  explicitly, never as "clean": 6,544 of this cohort are absent from gnomAD entirely
+  (no ancestry data), and the disparity rate is reported over the gnomAD-covered
+  subset only — never the whole cohort.
+
+- **A declared performance boundary.** gnomAD's per-variant API is rate-limited, so
+  the batch reads each gene's frequency + ancestry in one gene-level request. That
+  endpoint omits the faf95 filtering-AF, so the batch does not compute BA1/BS1
+  (benign frequency calls) — immaterial to a VUS cohort and to the reported axes:
+  rigor uses REVEL / AlphaMissense, and disparity uses the Middle-Eastern allele
+  number, which the gene-bulk returns identically to the per-variant path (verified).
+  No number is tuned; the buckets are fixed and cited before the run.
+
+---
+
+## 7. What this tool is not
 
 **Decision support — not a classifier, not a diagnosis.** It surfaces and
 organizes evidence and audits its own confidence. The interpretation, and the
