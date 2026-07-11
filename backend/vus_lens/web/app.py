@@ -106,9 +106,24 @@ def _card(ev, au) -> dict:
     }
 
 
+_COHORT_RESULT = Path(__file__).resolve().parents[3] / "data" / "cohort" / "cohort_result.json"
+
+
 @app.get("/")
 async def index() -> HTMLResponse:
     return HTMLResponse((STATIC / "index.html").read_text(encoding="utf-8"))
+
+
+@app.get("/cohort")
+async def cohort_panel() -> HTMLResponse:
+    return HTMLResponse((STATIC / "cohort.html").read_text(encoding="utf-8"))
+
+
+@app.get("/api/cohort")
+async def cohort_data() -> JSONResponse:
+    if not _COHORT_RESULT.exists():
+        return JSONResponse({"error": "cohort result not generated; run scripts/cohort_batch.py --full"}, status_code=404)
+    return JSONResponse(json.loads(_COHORT_RESULT.read_text(encoding="utf-8")))
 
 
 @app.get("/api/variants")
