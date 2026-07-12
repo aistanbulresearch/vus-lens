@@ -63,6 +63,11 @@ sudo ss -ltnp | grep ':8001' || echo "8001 free — good"
 # Note the main pipeline's service + port so you can confirm it's untouched later.
 # Replace <main-service> with its real unit name; write down its port too:
 systemctl is-active <main-service> ; sudo ss -ltnp | grep -vE ':(22|80|443)\b' | head
+
+# BASELINE the main site + free memory BEFORE touching anything, so Step 9 can
+# prove "still normal, no change". Write both numbers down:
+curl -s -o /dev/null -w "main baseline: HTTP %{http_code} in %{time_total}s\n" https://vus.aistanbulresearch.com/
+free -h | awk 'NR==1 || /^Mem:/'      # note "available" on this 4 GB box
 ```
 
 ## Step 1 — Isolated user + code  [MAIN: none]
@@ -170,16 +175,32 @@ Check DevTools console: no errors.
 
 ## Step 9 — Post-deploy resource + isolation check  [MAIN: read-only]
 
-```bash
-# vuslens footprint (single worker; loads subset.parquet once; expect ~150-250 MB RSS)
-systemctl show vuslens -p MemoryCurrent
-sudo ss -ltnp | grep ':8001'          # only vuslens listening on 8001
-free -h                                # RAM headroom on the box
+Confirms vuslens is light AND the main pipeline is unchanged: process, port, and an
+actual HTTP response compared against the Step-0 baseline (not merely "active").
 
-# The main pipeline is still exactly as before:
-systemctl is-active <main-service>     # active
-sudo ss -ltnp | grep ':<main-port>'    # still listening
+```bash
+# --- vuslens footprint (single worker; loads subset.parquet once) ---
+systemctl show vuslens.service -p MemoryCurrent     # expect ~150-250 MB
+sudo ss -ltnp | grep ':8001'                        # only vuslens on 8001
+
+# --- (a) MAIN pipeline (vus.aistanbulresearch.com) still responding NORMALLY ---
+systemctl is-active <main-service>                                   # active
+curl -s -o /dev/null -w "main now: HTTP %{http_code} in %{time_total}s\n" \
+  https://vus.aistanbulresearch.com/                                 # must match the Step-0 baseline
+sudo ss -ltnp | grep ':<main-port>'                                  # still listening
+
+# --- (b) RAM headroom on the 4 GB box with BOTH apps running ---
+free -h                                             # look at Mem: "available"
+systemctl show <main-service> vuslens.service -p MemoryCurrent       # memory of both services
 ```
+
+Expectations on the 4 GB box: vuslens adds only ~0.2 GB, so **available memory should
+stay comfortably above ~1 GB**. If `available` falls under ~300 MB the box was already
+tight (not caused by vuslens) — add swap or trim the main app before the demo; the main
+pipeline must never be pushed into swap.
+
+**If the main site's HTTP status or latency differs from the Step-0 baseline, STOP and
+roll back (below).** The main pipeline must not degrade.
 
 ---
 
