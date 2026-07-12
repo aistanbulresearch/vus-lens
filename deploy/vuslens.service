@@ -1,0 +1,35 @@
+[Unit]
+Description=VUS-Lens live demo (vuslens.aistanbulresearch.com) -- isolated from the main pipeline
+Documentation=https://github.com/aistanbulresearch/vus-lens
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vuslens
+Group=vuslens
+WorkingDirectory=/opt/vuslens
+
+# Secrets + config live here (chmod 600, owned by vuslens, NOT in git).
+# Provides ANTHROPIC_API_KEY and the two VUS_* knobs (empty for a subdomain).
+EnvironmentFile=/opt/vuslens/vuslens.env
+
+# Bind 127.0.0.1:8001 ONLY -- nginx is the only thing that reaches it.
+# Run the venv's uvicorn directly (the project is an editable install, so
+# `vus_lens` imports from source and the bundled data paths resolve).
+# Do NOT add --workers: the reasoning-stream cache (_CACHE) is in-process;
+# a second worker would 404 free-text reasoning requests that landed elsewhere.
+ExecStart=/opt/vuslens/.venv/bin/uvicorn vus_lens.web.app:app --host 127.0.0.1 --port 8001
+
+Restart=on-failure
+RestartSec=3
+
+# Hardening -- confined to /opt/vuslens, affects nothing else on the box.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/vuslens
+
+[Install]
+WantedBy=multi-user.target
