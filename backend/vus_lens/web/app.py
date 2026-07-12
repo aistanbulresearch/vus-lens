@@ -14,6 +14,7 @@ OFF/ON); the plain-language reasoning is credential-gated and streams on top.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 try:  # load ANTHROPIC_API_KEY from the gitignored repo-root .env, if present
@@ -34,7 +35,14 @@ from ..reasoning.client import credentials_available
 from ..reasoning.layers import reason_over_stream, reasoning_plan
 from .variants import PRESETS
 
-app = FastAPI(title="VUS-Lens")
+# Deploy-friendly config (all optional; defaults keep local same-origin behavior):
+# - VUS_ROOT_PATH: ASGI root_path when served behind a reverse proxy sub-path.
+# - VUS_PUBLIC_BASE: URL prefix the browser must prepend to /api/* calls (e.g.
+#   "/vuslens" when nginx maps a sub-path). Injected into live.html at serve time.
+ROOT_PATH = os.environ.get("VUS_ROOT_PATH", "")
+PUBLIC_BASE = os.environ.get("VUS_PUBLIC_BASE", "")
+
+app = FastAPI(title="VUS-Lens", root_path=ROOT_PATH)
 STATIC = Path(__file__).parent / "static"
 
 # Small in-memory cache so the SSE /api/reason reuses the evaluation the card was
@@ -122,6 +130,14 @@ async def cohort_panel() -> HTMLResponse:
 @app.get("/validation")
 async def validation_panel() -> HTMLResponse:
     return HTMLResponse((STATIC / "validation.html").read_text(encoding="utf-8"))
+
+
+@app.get("/live")
+async def live_shell() -> HTMLResponse:
+    html = (STATIC / "live.html").read_text(encoding="utf-8")
+    # Inject the browser-side API base (empty by default -> same-origin /api/*).
+    html = html.replace("__API_BASE__", PUBLIC_BASE)
+    return HTMLResponse(html)
 
 
 @app.get("/api/cohort")
