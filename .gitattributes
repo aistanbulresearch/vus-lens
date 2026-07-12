@@ -1,0 +1,4 @@
+# Deploy artifacts run on Linux (systemd unit, nginx conf, shell in the runbook).
+# Force LF regardless of the platform they are edited on, so a Windows checkout
+# can never commit CRLF that would confuse systemd/nginx on the server.
+deploy/** text eol=lf
