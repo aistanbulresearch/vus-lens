@@ -44,6 +44,12 @@
   .src,.crit,.conf p,.acontent p,.figcap,.rot3-labels,.vv,.kctx,.ctx{font-feature-settings:"tnum" 1,"lnum" 1}
 
   .page{max-width:680px; margin:0 auto; padding:52px 30px 40vh}
+  /* archival spine mark: a quiet vertical wordmark in the wide LEFT margin (the
+     right margin belongs to the nav). Wide-desktop only; hidden once the margin
+     closes up, so it never crowds the content or competes with the nav. */
+  .spine{position:fixed; top:50%; left:calc(50% - 388px); transform:translateY(-50%) rotate(180deg); writing-mode:vertical-rl; font-family:var(--serif); font-variation-settings:"opsz" 18; font-weight:500; font-size:12.5px; letter-spacing:.3em; color:var(--read); white-space:nowrap; z-index:70; pointer-events:none; user-select:none; display:none}
+  .spine .dot{color:var(--foxing)}
+  @media (min-width:1120px){ .spine{display:block} }
 
   /* sticky one-page anchor menu (top-right) */
   .tednav{position:fixed; top:24px; right:28px; z-index:90}
@@ -285,6 +291,7 @@
 </style>
 </head>
 <body data-mode="raw">
+<div class="spine" aria-hidden="true">vus<span class="dot">·</span>lens</div>
 <nav class="tednav" aria-label="Page sections">
   <input type="checkbox" id="navtoggle" class="navtoggle" aria-hidden="true">
   <label for="navtoggle" class="navbtn"><span>Sections</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></label>
