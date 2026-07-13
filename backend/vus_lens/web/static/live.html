@@ -101,6 +101,20 @@
   .klass{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
   .kval{font-family:var(--sans); font-weight:600; font-size:30px; letter-spacing:-.014em; color:var(--ink)}
   .kabbr{font-size:12px; font-weight:600; letter-spacing:.08em; color:var(--foxing-deep); border:1px solid var(--foxing); border-radius:20px; padding:3px 10px}
+  /* preset capability badge: names what the tool actually does on THIS variant,
+     derived from the live triggers. foxing = a genuine unreliability flag (6.1);
+     neutral ink = a capability (repeat locus / cross-source conflict). */
+  .capbadge{display:inline-flex; align-items:center; gap:7px; font-size:10px; letter-spacing:.1em; text-transform:uppercase; font-weight:700; padding:4px 11px; border-radius:20px; border:1px solid var(--hairline); color:var(--read); white-space:nowrap; line-height:1.5}
+  .capbadge:empty{display:none}
+  .capbadge::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--withdrawn); flex:none}
+  /* color encodes badge TYPE: foxing rust = genuinely flags unreliability (6.1);
+     slate + sage = two distinct neutral capabilities (repeat locus / cross-source). */
+  .capbadge.k-ancestry{color:var(--foxing-deep); border-color:var(--foxing); background:rgba(156,107,74,.15)}
+  .capbadge.k-ancestry::before{background:var(--foxing)}
+  .capbadge.k-repeat{color:var(--slate); border-color:var(--slate); background:rgba(92,105,117,.15)}
+  .capbadge.k-repeat::before{background:var(--slate)}
+  .capbadge.k-conflict{color:#4C5A3C; border-color:var(--sage); background:rgba(95,106,74,.16)}
+  .capbadge.k-conflict::before{background:var(--sage)}
   .kctx{margin-top:14px; font-size:14px; line-height:1.6; color:var(--read); max-width:60ch}
   .kctx b{color:var(--ink); font-weight:600}
 
@@ -226,11 +240,16 @@
   .query-box svg{flex:none; opacity:.5}
   .query-box input{border:0; background:transparent; font-family:var(--sans); font-size:15px; color:var(--ink); width:100%; letter-spacing:.005em}
   .query-box input::placeholder{color:var(--withdrawn)}
-  .examples{margin-top:14px; display:flex; align-items:center; gap:9px; flex-wrap:wrap}
-  .ex-label{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--read)}
-  .chip-ex{font-family:var(--sans); font-size:12.5px; color:var(--ink); background:transparent; border:1px solid var(--hairline); border-radius:20px; padding:5px 12px; cursor:pointer; letter-spacing:.005em; transition:border-color .2s, color .2s}
+  .examples{margin-top:14px; display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap}
+  .ex-label{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--read); padding-top:9px}
+  .chip-ex{font-family:var(--sans); font-size:12.5px; color:var(--ink); background:transparent; border:1px solid var(--hairline); border-radius:11px; padding:8px 13px; cursor:pointer; letter-spacing:.005em; transition:border-color .2s; display:inline-flex; flex-direction:column; align-items:flex-start; gap:5px; text-align:left}
   .chip-ex .num{font-feature-settings:"tnum" 1}
-  .chip-ex:hover{border-color:var(--foxing); color:var(--foxing-deep)}
+  .chip-ex .cap-tag{font-size:9px; letter-spacing:.09em; text-transform:uppercase; font-weight:700; color:var(--read); display:inline-flex; align-items:center; gap:5px}
+  .chip-ex .cap-tag::before{content:""; width:5px; height:5px; border-radius:50%; background:var(--withdrawn); flex:none}
+  .chip-ex .cap-tag.k-ancestry{color:var(--foxing-deep)} .chip-ex .cap-tag.k-ancestry::before{background:var(--foxing)}
+  .chip-ex .cap-tag.k-repeat{color:var(--slate)} .chip-ex .cap-tag.k-repeat::before{background:var(--slate)}
+  .chip-ex .cap-tag.k-conflict{color:#4C5A3C} .chip-ex .cap-tag.k-conflict::before{background:var(--sage)}
+  .chip-ex:hover{border-color:var(--foxing)}
 
   /*footer (item 10) */
   footer{margin-top:58px; padding-top:18px; border-top:1px solid var(--hairline); display:flex; flex-direction:column; gap:6px}
@@ -302,6 +321,7 @@
     <div class="klass">
       <span class="kval" id="k-val"></span>
       <span class="kabbr" id="k-abbr"></span>
+      <span class="capbadge" id="k-badge"></span>
     </div>
     <p class="kctx" id="k-ctx"></p>
   </section>
@@ -382,10 +402,10 @@
     </form>
     <div class="examples">
       <span class="ex-label">Try</span>
-      <button class="chip-ex" type="button" data-id="hfe-c282y"><span class="num">rs1800562</span></button>
-      <button class="chip-ex" type="button" data-id="mlh1-lynch"><span class="num">rs35045067</span></button>
-      <button class="chip-ex" type="button" data-id="atm-hero"><span class="num">11-108244867-C-G</span></button>
-      <button class="chip-ex" type="button" data-id="atn1-cag17">ATN1 CAG[17]</button>
+      <button class="chip-ex" type="button" data-id="hfe-c282y" data-label="rs1800562"><span class="num">rs1800562</span><span class="cap-tag k-conflict">Cross-source conflict</span></button>
+      <button class="chip-ex" type="button" data-id="mlh1-lynch" data-label="rs35045067"><span class="num">rs35045067</span><span class="cap-tag k-ancestry">Ancestry-confidence</span></button>
+      <button class="chip-ex" type="button" data-id="atm-hero" data-label="11-108244867-C-G"><span class="num">11-108244867-C-G</span><span class="cap-tag k-ancestry">Ancestry-confidence</span></button>
+      <button class="chip-ex" type="button" data-id="atn1-cag17" data-label="ATN1 CAG[17]">ATN1 CAG[17]<span class="cap-tag k-repeat">Repeat-expansion</span></button>
     </div>
     <div id="q-error" class="ctx" style="color:var(--terra-deep); margin-top:12px; display:none"></div>
   </section>
@@ -423,6 +443,18 @@
   var LYNCH={MLH1:1,MSH2:1,MSH6:1,PMS2:1,EPCAM:1};
   function hasWarn(d,t){return (d.warnings||[]).some(function(w){return w.trigger.indexOf(t)===0;});}
   function getWarn(d,t){return (d.warnings||[]).filter(function(w){return w.trigger.indexOf(t)===0;})[0];}
+  // Capability badge — derived from the live card's real triggers (never a hardcoded
+  // preset map, so it self-corrects if data changes): 6.1 -> ancestry-confidence (a
+  // genuine unreliability flag, foxing); 6.2 -> repeat-expansion; Benign/LB while
+  // ClinVar carries a pathogenic label -> a real cross-source disagreement the tool
+  // surfaces. Returns null when none applies (no badge invented).
+  function capabilityBadge(d){
+    if(hasWarn(d,'6.1')) return {label:'Ancestry-confidence', kind:'ancestry'};
+    if(hasWarn(d,'6.2')) return {label:'Repeat-expansion', kind:'repeat'};
+    var c=d.acmg_class||'';
+    if((c==='Benign'||c==='Likely benign') && d.clinvar && d.clinvar.has_pathogenic) return {label:'Cross-source conflict', kind:'conflict'};
+    return null;
+  }
 
   var state={key:null,card:null,hero:false,streamed:false,es:null};
 
@@ -461,6 +493,8 @@
   function renderClass(d,hero){
     $('#k-val').textContent=d.acmg_class;
     $('#k-abbr').textContent=ABBR[d.acmg_class]||'—';
+    var cap=capabilityBadge(d), kb=$('#k-badge');
+    if(kb){ kb.textContent=cap?cap.label:''; kb.className='capbadge'+(cap?' k-'+cap.kind:''); }
     if(hero){
       $('#k-ctx').innerHTML='Applied to the evidence below, the ACMG rules place this variant in the grey zone: <b>not benign, not pathogenic</b>. That call is fixed by the rules. The confidence layer never changes it; it only reads how far the evidence behind it can be trusted for this patient.';
     } else {
@@ -677,7 +711,7 @@
   var qform=$('#q-form'); if(qform){ qform.addEventListener('submit',function(e){ e.preventDefault(); var v=$('#q-input').value.trim(); if(v) evaluate({rsid:v}, false); }); }
   // Example chips run curated presets (which carry ref/alt/HGVS disambiguation the
   // bare display string lacks); the free-text field above handles arbitrary input.
-  document.querySelectorAll('.chip-ex').forEach(function(b){ b.addEventListener('click',function(){ var id=b.getAttribute('data-id'); if(id){ $('#q-input').value=b.textContent.trim(); window.scrollTo({top:0,behavior:'smooth'}); evaluate({id:id}, id==='atm-hero'); } }); });
+  document.querySelectorAll('.chip-ex').forEach(function(b){ b.addEventListener('click',function(){ var id=b.getAttribute('data-id'); if(id){ $('#q-input').value=b.getAttribute('data-label')||''; window.scrollTo({top:0,behavior:'smooth'}); evaluate({id:id}, id==='atm-hero'); } }); });
 
   // boot: the hero, genuinely live
   evaluate({id:'atm-hero'}, true);
