@@ -47,10 +47,10 @@ knobs stay EMPTY**:
 - **Packages** (install if missing — none affects the main app):
   ```bash
   sudo apt update
-  sudo apt install -y git nginx certbot python3-certbot-nginx
-  # uv (Python manager) system-wide, so the vuslens user can use it in setup:
-  command -v uv || curl -LsSf https://astral.sh/uv/install.sh | sudo env UV_INSTALL_DIR=/usr/local/bin sh
+  sudo apt install -y git nginx certbot python3-certbot-nginx python3-venv
   ```
+  Uses the system Python 3.12 with `python3 -m venv` + `pip` — the same convention
+  as the main app. No `uv` is needed on the server.
 
 ---
 
@@ -73,8 +73,9 @@ free -h | awk 'NR==1 || /^Mem:/'      # note "available" on this 4 GB box
 ## Step 1 — Isolated user + code  [MAIN: none]
 
 ```bash
-# New system user; its home IS the app dir. No login shell.
-sudo useradd --system --create-home --home-dir /opt/vuslens --shell /usr/sbin/nologin vuslens
+# New system user. NOTE: NO --create-home — the git clone below must create
+# /opt/vuslens itself; cloning into a non-empty home skeleton would fail.
+sudo useradd --system --home-dir /opt/vuslens --shell /usr/sbin/nologin vuslens
 
 # Clone the repo into /opt/vuslens (the bundled data — Turkish Variome
 # subset.parquet, cohort/validation JSON — comes WITH the clone; only the API
@@ -86,14 +87,16 @@ sudo chown -R vuslens:vuslens /opt/vuslens
 ## Step 2 — Isolated venv + dependencies  [MAIN: none]
 
 ```bash
-# Creates /opt/vuslens/.venv from uv.lock and installs the project editable.
+# Standard python3 venv + editable pip install (same convention as the main app).
 # Downloads Python deps into THIS venv only; the main venv is not touched.
 cd /opt/vuslens
-sudo -u vuslens env HOME=/opt/vuslens uv sync --frozen --no-dev
+sudo -u vuslens env HOME=/opt/vuslens python3 -m venv /opt/vuslens/.venv
+sudo -u vuslens env HOME=/opt/vuslens /opt/vuslens/.venv/bin/pip install --upgrade pip
+sudo -u vuslens env HOME=/opt/vuslens /opt/vuslens/.venv/bin/pip install -e /opt/vuslens
 
-# Sanity: the venv's uvicorn exists and vus_lens imports from source.
-sudo -u vuslens /opt/vuslens/.venv/bin/python -c "import vus_lens; print(vus_lens.__file__)"
-# -> /opt/vuslens/backend/vus_lens/__init__.py
+# Sanity: vus_lens imports from source (editable) and the bundled parquet resolves.
+sudo -u vuslens /opt/vuslens/.venv/bin/python -c "import vus_lens, vus_lens.clients.turkish_variome as t, pathlib; print(vus_lens.__file__); print('parquet:', pathlib.Path(t.DEFAULT_PARQUET).exists())"
+# -> /opt/vuslens/backend/vus_lens/__init__.py  +  parquet: True
 ```
 
 ## Step 3 — Production env file (the API key)  [MAIN: none]
@@ -220,8 +223,9 @@ sudo rm -rf /opt/vuslens && sudo userdel vuslens
 
 ```bash
 cd /opt/vuslens
-sudo -u vuslens git pull
-sudo -u vuslens env HOME=/opt/vuslens uv sync --frozen --no-dev
+sudo -u vuslens git pull --ff-only origin main
+# only if dependencies changed (editable install picks up plain .py edits on restart):
+sudo -u vuslens env HOME=/opt/vuslens /opt/vuslens/.venv/bin/pip install -e /opt/vuslens
 sudo systemctl restart vuslens
 ```
 
