@@ -535,7 +535,12 @@
         '<p>The "rare" read rests on <b>'+commas(an)+'</b> Middle Eastern alleles. A zero-observation call at 1×10⁻⁵ needs about <b>300,000</b> (rule of 3), so '+commas(an)+' is <span class="frac">~'+(an?(an/300000*100).toFixed(1):'—')+'% of what\'s required</span>. For a Turkish patient, the rarity is not reliably established. Turkish Variome (3,362 individuals): not observed.</p>'+
         rot3Bar(an,300000)+'</div>';
     } else if(w61){
-      confHtml='<div class="inner"><p class="lede">'+esc(w61.message||'Frequency reliability')+'</p><p>'+esc(w61.detail||'')+(w61.citation?' <span class="frac">'+esc(w61.citation)+'</span>':'')+'</p>'+((g&&g.mid_an!=null)?rot3Bar(g.mid_an,3/1e-5):'')+'</div>';
+      // Drive the bar's "needed" figure from the auditor's own computed value in the
+      // 6.1 detail (3 / the variant's real threshold), so the bar label always matches
+      // the detail text. ATM -> 300,000 (1e-5); MLH1 / other generic genes -> 30,000 (1e-4).
+      var nm=/needs ~([\d,]+) alleles/.exec(w61.detail||'');
+      var needed=nm?parseInt(nm[1].replace(/,/g,''),10):null;
+      confHtml='<div class="inner"><p class="lede">'+esc(w61.message||'Frequency reliability')+'</p><p>'+esc(w61.detail||'')+(w61.citation?' <span class="frac">'+esc(w61.citation)+'</span>':'')+'</p>'+((needed&&g&&g.mid_an!=null)?rot3Bar(g.mid_an,needed):'')+'</div>';
     }
     if(confHtml) html+='<div class="conf">'+confHtml+'</div>';
     body.innerHTML=html;
